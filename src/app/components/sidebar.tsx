@@ -20,7 +20,7 @@ const sidebar = () => {
         <Box
           display={"flex"}
           flexDir={"column"}
-          gap={{ sm: "18px", '2xl': "32px" }}
+          gap={{ sm: "14px", '2xl': "32px" }}
           // paddingTop={{ sm: "", '2xl': "32px" }}
           alignItems={"center"}
         >
@@ -33,7 +33,7 @@ const sidebar = () => {
             flexShrink={0}
           >
             <Text
-              paddingTop={{ sm: "", "3xl": "40px" }}
+              paddingTop={{ sm: "20px", "3xl": "40px" }}
               width={{ sm: "22px", "3xl": "" }}
             >
               <Image
@@ -43,11 +43,11 @@ const sidebar = () => {
 
           </Box>
           <Box
-          display={"flex"}
-          flexDir={"column"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          gap={{ sm: "2px", '2xl': "8px" }}
+            display={"flex"}
+            flexDir={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            gap={{ sm: "2px", '2xl': "8px" }}
           >
             <Box
               display={"flex"}
@@ -136,9 +136,9 @@ const sidebar = () => {
       <Box background={"var(--gray-50, #F7FAFC);"}>
         <Box
           display={"flex"}
-          width={{ sm: "", '2xl': '1864px' }}
-          padding={{ sm: "", '2xl': '24px 32px' }}
-          alignItems={"center"}
+          width={{ sm: "100%", '2xl': '1864px' }}
+          padding={{ sm: "10px 18px", '2xl': '24px 32px' }}
+          alignItems={"flex-start"}
           gap={{ sm: "", '2xl': '8px' }}
         >
           <Box
@@ -146,7 +146,7 @@ const sidebar = () => {
             display={"flex"}
             flexDir={"column"}
             alignItems={"flex-start"}
-            gap={{ sm: "", '2xl': '8px' }}
+            gap={{ sm: "4px", '2xl': '8px' }}
             flex={"1 0 0"}
           >
             <Heading
@@ -173,38 +173,35 @@ const sidebar = () => {
           </Box>
           <Button
             display={"flex"}
-            height={{ sm: "", '2xl': '32px' }}
-            padding={{ sm: "", '2xl': '0px 12px' }}
+            height={{ sm: "22px", '2xl': '32px' }}
+            padding={{ sm: "0px 8px", '2xl': '0px 12px' }}
             justifyContent={"center"}
             alignItems={"center"}
-            gap={{ sm: "", '2xl': '8px' }}
+            gap={{ sm: "6px", '2xl': '8px' }}
             background={"var(--gray-50, #F7FAFC);"}
-            borderRadius={"6px"}
+            borderRadius={{sm: "2px", md: "3px", lg: "4px", xl: "5px", '2xl': "6px"}}
             border={" 1px solid var(--primary-main, #11190C)"}
           >
             <Text
               color={'var(--primary-main, #11190C)'}
               fontFamily={"Inter"}
-              fontSize={{ sm: '', '2xl': '14px' }}
+              fontSize={{ sm: '14px', '2xl': '14px' }}
               fontStyle={"normal"}
-              fontWeight={'600'}
+              fontWeight={{sm: "500", '2xl': '600'}}
               lineHeight={"20px"}
             >
               Call to Action
             </Text>
-            <Box>
               <Image src={"/right-icon.svg"} alt={""}
                 width={{ sm: '', '2xl': "14px" }}
                 height={{ sm: '', '2xl': "14px" }}
               />
-            </Box>
-
           </Button>
         </Box>
 
         <Box
           display={"flex"}
-          width={{ sm: "", '2xl': '1800px' }}
+          width={{ sm: "90%", '2xl': '1800px' }}
           flexDir={"column"}
           alignItems={"flex-start"}
           gap={{ sm: "", '2xl': '8px' }}
@@ -212,26 +209,26 @@ const sidebar = () => {
         >
           <Box
             display={"flex"}
-            width={{ sm: "", '2xl': '431px' }}
+            width={{ sm: "100%", '2xl': '431px' }}
             flexDir={"column"}
-            padding={{ sm: "", '2xl': '24px' }}
+            padding={{ sm: "14px", '2xl': '24px' }}
             alignItems={"flex-start"}
             gap={{ sm: "", '2xl': '10px' }}
-            flexShrink={0}
             borderRadius={"6px"}
-            border={" 1px solid var(--primary-states-focus-visible, rgba(17, 25, 12, 0.30))"}
-            background={"var(--white-100, #FFF)"}
+            outline={"0.0625em solid rgba(17, 25, 12, 0.3)"}
+            outlineColor={"rgba(17, 25, 12, 0.3)"}
+            background={"#FFF"}
           >
             <Flex
-              gap={{ sm: "", '2xl': '10px' }}
+              gap={{ sm: "4px", '2xl': '10px' }}
+              justifyContent={"space-between"}
             >
               <Box
-                width={{ sm: "", '2xl': "282px" }}
+                width={{ sm: "100px", '2xl': "282px" }}
               >
                 <Image src={"/hindLogo.svg"} alt={"logo"}
                   width={{ sm: "", '2xl': "178px" }}
                   height={{ sm: "", '2xl': "50px" }}
-                  flexShrink={0}
                 />
               </Box>
               <Button
@@ -293,7 +290,6 @@ const sidebar = () => {
               </Box>
             </Flex>
           </Box>
-
         </Box>
       </Box>
 
