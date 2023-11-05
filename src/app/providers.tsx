@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import theme from '../../theme/theme'
 import '@fontsource/inter/400.css'
 import '@fontsource/chivo/700.css'
+delete theme.styles.global;
 
 export function Providers({ 
     children 
@@ -13,7 +14,7 @@ export function Providers({
   }) {
   return (
     <CacheProvider>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={theme} resetCSS={true} disableGlobalStyle={true} >
         {children}
       </ChakraProvider>
     </CacheProvider>
