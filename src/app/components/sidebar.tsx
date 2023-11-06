@@ -3,7 +3,6 @@ import React from 'react'
 import { Box, Heading, Image, Text, Button, Flex } from "@chakra-ui/react"
 import Popup from './pop-up'
 
-// 'sm': "100%", 'md': "60%", 'lg': "30%", 'xl': "50%", '2xl': "80%"
 const sidebar = () => {
   return (
     <Flex
@@ -33,8 +32,8 @@ const sidebar = () => {
           >
             <Image
               src={"/Flattened.svg"} alt={"logo"}
-              width={{ sm: "23px",  mm: "24px", ml: "25px", md: "27px", lg: "30px", '2xl': '33px' }}
-              height={{ sm: "21px",  mm: "24px", ml: "25px", md: "27px", lg: "30px", '2xl': '34px' }}
+              width={{ sm: "23px", mm: "24px", ml: "25px", md: "27px", lg: "30px", '2xl': '33px' }}
+              height={{ sm: "21px", mm: "24px", ml: "25px", md: "27px", lg: "30px", '2xl': '34px' }}
             />
           </Box>
 
@@ -52,8 +51,8 @@ const sidebar = () => {
               alignItems={"center"}
             >
               <Image src={"/calendar.svg"} alt={"logo"}
-                width={{ sm: "18px",  mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
-                height={{ sm: "18px",  mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+                width={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+                height={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
               />
             </Box>
             <Box
@@ -76,8 +75,8 @@ const sidebar = () => {
               gap={{ sm: "2px", '2xl': "8px" }}
             >
               <Image src={"/coins-hand.svg"} alt={"logo"}
-                width={{ sm: "18px",  mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
-                height={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px",  '2xl': "24px" }}
+                width={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+                height={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
               />
             </Box>
           </Box>
@@ -88,16 +87,16 @@ const sidebar = () => {
         <Box
           display={"flex"}
           flexDir={"column"}
-          gap={{ sm: "14px",  mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+          gap={{ sm: "14px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
           paddingBottom={{ sm: "14px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
           alignItems={"center"}
         >
           <Box
             display={"flex"}
-            padding={{ sm: "2px", md: "4px", lg:"6px", xl: "7px", '2xl': "8px" }}
+            padding={{ sm: "2px", md: "4px", lg: "6px", xl: "7px", '2xl': "8px" }}
             justifyContent={"center"}
             alignItems={"center"}
-            gap={{ sm: "2px", md: "4px", lg:"6px", xl: "7px", '2xl': "8px" }}
+            gap={{ sm: "2px", md: "4px", lg: "6px", xl: "7px", '2xl': "8px" }}
             borderRadius={{ sm: "4px", '2xl': "6px" }}
             border={"1px solid var(--black-alpha-200, rgba(0, 0, 0, 0.08))"}
             background={"var(--black-alpha-50, rgba(0, 0, 0, 0.04))"}
@@ -120,8 +119,8 @@ const sidebar = () => {
             height={{ sm: "24px", md: "26px", lg: "28px", xl: "30px", '2xl': "32px" }}
           >
             <Image src={"/user.svg"} alt={"logo"}
-              width={{ sm: "14px", md:"15px", lg: "16px", xl: "17px", '2xl': "18.667px" }}
-              height={{ sm: "14px", md:"15px", lg: "16px", xl: "17px", '2xl': "18.667px" }}
+              width={{ sm: "14px", md: "15px", lg: "16px", xl: "17px", '2xl': "18.667px" }}
+              height={{ sm: "14px", md: "15px", lg: "16px", xl: "17px", '2xl': "18.667px" }}
             />
           </Box>
         </Box>
@@ -129,8 +128,8 @@ const sidebar = () => {
 
       {/* main content */}
       <Box background={"var(--gray-50, #F7FAFC);"}
-      width={"100%"}
-      
+        width={"100%"}
+
       >
         <Box
           display={"flex"}
@@ -153,7 +152,7 @@ const sidebar = () => {
               fontSize={{ sm: '16px', md: "20px", lg: "22px", xl: "26px", '2xl': '30px' }}
               fontStyle={"normal"}
               fontWeight={'400'}
-              lineHeight={{sm: "", '2xl': "39.9px"}}
+              lineHeight={{ sm: "", '2xl': "39.9px" }}
             >
               Import Data
             </Heading>
@@ -201,12 +200,12 @@ const sidebar = () => {
         <Box
           width={{ sm: "90%", md: "95%", '2xl': '1800px' }}
           gap={{ sm: "", '2xl': '8px' }}
-          margin={"auto"}
           paddingTop={{ sm: "10px", '2xl': "16px" }}
+          paddingLeft={{sm: "18px", md: "22px", lg: "28px", xl: "30px", '2xl': 'px 32px' }}
         >
           <Box
             display={"flex"}
-            width={{ sm: "90%", ml: "270px", md: "300px", lg: '340px', xl: "380px", '2xl': '431px' }}
+            width={{ sm: "100%", ml: "270px", md: "300px", lg: '340px', xl: "380px", '2xl': '431px' }}
             flexDir={"column"}
             padding={{ sm: "14px", md: "18px", lg: "20px", 'xl': '22px', '2xl': '24px' }}
             alignItems={"flex-start"}
@@ -221,42 +220,16 @@ const sidebar = () => {
               width={"100%"}
             >
               <Box
-                width={{ sm: "100px", md: "160px", lg: "200px", xl: "240px", '2xl': "282px" }}
-                 flexShrink={0}
+                width={{ sm: "120px", md: "160px", lg: "200px", xl: "240px", '2xl': "282px" }}
+                flexShrink={0}
               >
                 <Image src={"/hindLogo.svg"} alt={"logo"}
                   width={{ sm: "100px", md: "120px", lg: "140px", xl: "160px", '2xl': "178px" }}
                   height={{ sm: "32px", md: "36px", lg: "40px", xl: "44px", '2xl': "50px" }}
-                 
+
                 />
               </Box>
-              <Button
-                display={"flex"}
-                height={{ sm: "", '2xl': '32px' }}
-                padding={{ sm: "0px 8px", lg: "0px 10px", '2xl': '0px 12px' }}
-                justifyContent={"center"}
-                alignItems={"center"}
-                gap={{ sm: "4px", md: "6px", '2xl': '8px' }}
-                borderRadius={{sm: "4px", '2xl': "6px"}}
-                border={"1px solid var(--primary-states-focus-visible, rgba(17, 25, 12, 0.30))"}
-                background={" var(--white-100, #FFF)"}
-              >
-                <Image src={"/right-icon-upload.svg"} alt={""}
-                  width={{ sm: '14px', '2xl': "14px" }}
-                  height={{ sm: '14px', '2xl': "14px" }}
-                  flexShrink={0}
-                />
-                <Text
-                  color={'var(--primary-main, #11190C)'}
-                  fontFamily={"Inter"}
-                  fontSize={{ sm: '14px', '2xl': '14px' }}
-                  fontStyle={"normal"}
-                  fontWeight={'600'}
-                  lineHeight={"20px"}
-                >
-                  Import
-                </Text>
-              </Button>
+              <Popup />
             </Flex>
             <Flex
               flexDir={"column"}
@@ -268,7 +241,7 @@ const sidebar = () => {
                 fontSize={{ sm: '14px', md: "15px", lg: "16px", xl: "18px", '2xl': '20px' }}
                 fontStyle={"normal"}
                 fontWeight={'500'}
-                lineHeight={{sm: "20px", md: "20px", lg: "22px", xl: "26px", "2xl": "28px"}}
+                lineHeight={{ sm: "20px", md: "20px", lg: "22px", xl: "26px", "2xl": "28px" }}
               >
                 Hindsite Software
               </Heading>
@@ -281,7 +254,7 @@ const sidebar = () => {
                   fontSize={{ sm: '12px', md: "13px", lg: "14px", xl: "15px", '2xl': '16px' }}
                   fontStyle={"normal"}
                   fontWeight={'400'}
-                  lineHeight={{sm: "20px", md: "18px", lg: "20px", xl: "22px", "2xl": "24px"}}
+                  lineHeight={{ sm: "20px", md: "18px", lg: "20px", xl: "22px", "2xl": "24px" }}
                 >
                   Switch from Hindsite to ServeCommand in just a few clicks.
                 </Text>
