@@ -391,6 +391,7 @@ console.log(uploadedFile.name)
                                         fontStyle={"normal"}
                                         fontWeight={"600"}
                                         lineHeight={"20px"}
+                                        
                                     >cancel</Button>
                                     <Button
                                         display={"flex"}
