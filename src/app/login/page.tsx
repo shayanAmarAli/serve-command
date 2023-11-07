@@ -189,9 +189,6 @@ const Page = () => {
                         </Flex>
                     </Box>
 
-<Link>
-
-</Link>
                     <Box
                         display={"flex"}
                         height={{ sm: "", '2xl': "40px" }}

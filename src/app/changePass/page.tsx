@@ -1,3 +1,4 @@
+"use client"
 import { Box, Button, Input } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useFormData } from '../context/authContext';
