@@ -8,6 +8,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider"
 import { useFormData } from '@/app/context/authContext';
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Page = () => {
     const [loginInfo, setLoginInfo] = useState({ phone: "", password: "" });
@@ -211,6 +212,9 @@ const Page = () => {
                             onClick={loginHanlder}
                         >Sign in</Button>
                     </Box>
+                        <Link href={"/forgetPassword"}>
+                            Forget password
+                        </Link>
                 </Box>
 
             </Flex>
