@@ -3,6 +3,7 @@ import {
     Box, Button, Text, Image, Heading, Flex, Modal, ModalOverlay, ModalContent, Input, useDisclosure
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import axios from "axios"
 
 const Popup = () => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
@@ -13,29 +14,41 @@ const Popup = () => {
         const uploadedFile = await event.target.files[0];
         uploadedFile && setIsFileUploaded(true);
         uploadedFile && setFileName(uploadedFile.name);
-
+console.log(uploadedFile.name)
         if (uploadedFile && uploadedFile.size > 0) {
-                try {
-                    const response = await
-                        fetch(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`, {
-                            method: 'GET',
-                        });
-                    if (response.ok) {
-                        console.log('File name uploaded and generated presignedurl successfully!', response.url);
-                        const PUT_Response = await fetch(response.url, {
-                            method: 'PUT',
-                            body: uploadedFile,
-                            headers: {
-                                'Content-Type': uploadedFile.type,
-                            },
-                        });
-                        PUT_Response.ok && console.log("File upload successfully-->", PUT_Response )
+            try {
+                const response = await
+                    axios.get(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`);
+
+                const preSigned = response.data.uploadUrl;
+                if (response.data) {
+                    console.log('File name uploaded and generated presignedurl successfully!', response.data.uploadUrl);
+                    console.log("Ready file to upload file", uploadedFile)
+                    // const PUT_Response = await axios.put(preSigned, uploadedFile, {
+                    //     headers: {
+                    //         'Content-Type': uploadedFile.type,
+                    //     }
+                    // });
+
+                    const PUT_Response = await fetch(preSigned, {
+                        method: "PUT",
+                        body: uploadedFile,
+                        headers: {
+                            'Content-Type': uploadedFile.type
+                        }
+                    });
+
+                    if (PUT_Response.ok) {
+                        console.log("File upload successfully-->", PUT_Response.ok)
                     } else {
-                        console.error('File upload failed.');
+                        console.log("PUT REQUEST FAILED")
                     }
-                } catch (error) {
-                    console.error('Error uploading file:', error);
+                } else {
+                    console.error('File upload failed.');
                 }
+            } catch (error) {
+                console.error('Error uploading file--->', error);
+            }
         } else {
             console.log("Please select file to upload");
         }
@@ -378,6 +391,7 @@ const Popup = () => {
                                         fontStyle={"normal"}
                                         fontWeight={"600"}
                                         lineHeight={"20px"}
+                                        
                                     >cancel</Button>
                                     <Button
                                         display={"flex"}
@@ -391,7 +405,7 @@ const Popup = () => {
                                         fontFamily={"Inter"}
                                         fontSize={{ sm: "12px", md: "14px", '2xl': "14px" }}
                                         fontStyle={"normal"}
-                                        fontWeight={{ sm: "500", md: "550", "2xl": "600"}}
+                                        fontWeight={{ sm: "500", md: "550", "2xl": "600" }}
                                         lineHeight={"20px"}
                                         isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}

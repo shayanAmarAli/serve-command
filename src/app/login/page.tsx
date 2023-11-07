@@ -21,6 +21,7 @@ const Page = () => {
             ...previousVal,
             [name]: value
         }));
+        
         console.log(loginInfo.phone)
     }
 
@@ -44,15 +45,20 @@ const Page = () => {
 
     // send users credential to cognito for authentication
     const loginHanlder = async () => {
+        setUserData((preVal: any) => ({
+            ...preVal,
+            username: loginInfo.phone,
+        }));
         try {
             const response = await cognitoClient.send(initiateAuthCommand)
             console.log("Login response-->", response);
             setUserData((preVal: any) => ({
                 ...preVal,
-                session: response.Session
+                session: response.AuthenticationResult?.AccessToken
             }));
             console.log('session (from request) has been updated into context---->', userData.session);
-            userData.session && router.push('/changePass')
+            const isSession = await localStorage.getItem('key') as string
+            JSON.parse(isSession).session ? router.push('/') : router.push('/changePass')
         } catch (err) {
             console.log(err)
         }
