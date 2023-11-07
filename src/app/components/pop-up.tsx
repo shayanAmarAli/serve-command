@@ -14,13 +14,13 @@ const Popup = () => {
         const uploadedFile = await event.target.files[0];
         uploadedFile && setIsFileUploaded(true);
         uploadedFile && setFileName(uploadedFile.name);
-
+console.log(uploadedFile.name)
         if (uploadedFile && uploadedFile.size > 0) {
             try {
                 const response = await
                     axios.get(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`);
 
-                const preSigned = await response.data.uploadUrl;
+                const preSigned = response.data.uploadUrl;
                 if (response.data) {
                     console.log('File name uploaded and generated presignedurl successfully!', response.data.uploadUrl);
                     console.log("Ready file to upload file", uploadedFile)
@@ -34,7 +34,7 @@ const Popup = () => {
                         method: "PUT",
                         body: uploadedFile,
                         headers: {
-                            'Content-Type': uploadedFile.type,
+                            'Content-Type': uploadedFile.type
                         }
                     });
 
