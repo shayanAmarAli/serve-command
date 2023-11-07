@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.441.0",
     "@chakra-ui/next-js": "^2.1.5",
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/chivo": "^5.0.8",
     "@fontsource/inter": "^5.0.15",
+    "amazon-cognito-identity-js": "^6.3.6",
+    "aws-amplify": "^5.3.11",
+    "aws-sdk": "^2.1488.0",
     "framer-motion": "^10.16.4",
     "mockserver-client": "^5.15.0",
     "next": "14.0.1",

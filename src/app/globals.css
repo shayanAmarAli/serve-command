@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.bg-btn {
+  background: var(--primary-main, #11190c);
+  color: "white"; /* Your desired text color */
+}
+.bg-btn:disabled {
+  background: var(--gray-100, #EDF2F7);
+  color: var(--black-alpha-400, rgba(0, 0, 0, 0.24));
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

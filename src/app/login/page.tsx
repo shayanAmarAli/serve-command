@@ -1,6 +1,63 @@
+"use client"
 import { Box, Button, Flex, Heading, Image, Input, Text } from "@chakra-ui/react";
+import { useState } from "react";
+import {
+    CognitoIdentityProviderClient, RespondToAuthChallengeCommand,
+    InitiateAuthCommand, ChangePasswordCommand,
+    ForgotPasswordCommand, ConfirmForgotPasswordCommand
+} from "@aws-sdk/client-cognito-identity-provider"
+import { useFormData } from '@/app/context/authContext';
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Page = () => {
+    const [loginInfo, setLoginInfo] = useState({ phone: "", password: "" });
+    const { userData, setUserData } = useFormData();
+    const router = useRouter();
+
+    const loginInputHandler = (event: any) => {
+        const { name, value } = event.target;
+        setLoginInfo(previousVal => ({
+            ...previousVal,
+            [name]: value
+        }));
+        console.log(loginInfo.phone)
+    }
+
+    const params: any = {
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        ClientId: '1727702mdj4021tmc218s3efab',
+        UserPoolId: 'us-east-1_DIwOdU2TN',
+        AuthParameters: {
+            USERNAME: loginInfo.phone,
+            PASSWORD: loginInfo.password
+        }
+    }
+
+    // defining region of cognito
+    const cognitoClient = new CognitoIdentityProviderClient({
+        region: "us-east-1"
+    })
+
+    // initiate authentication of a user
+    const initiateAuthCommand = new InitiateAuthCommand(params)
+
+    // send users credential to cognito for authentication
+    const loginHanlder = async () => {
+        try {
+            const response = await cognitoClient.send(initiateAuthCommand)
+            console.log("Login response-->", response);
+            setUserData((preVal: any) => ({
+                ...preVal,
+                session: response.Session
+            }));
+            console.log('session (from request) has been updated into context---->', userData.session);
+            userData.session && router.push('/changePass')
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <Flex
             flexDir={"column"}
@@ -75,14 +132,17 @@ const Page = () => {
                                 alignItems={"flex-start"}
                                 alignSelf={"stretch"}
                             >
-                                <Input type="number" name="phone" placeholder="Enter your phone number"
+                                <Input
+                                    type="text" name="phone"
+                                    placeholder="Enter your phone number"
                                     color={"var(--gray-400, #A0AEC0)"}
                                     fontFamily={"Inter"}
                                     fontSize={{ sm: "14px", '2xl': "16px" }}
                                     fontStyle={"normal"}
                                     fontWeight={400}
                                     lineHeight={"normal"}
-
+                                    onChange={loginInputHandler}
+                                    value={loginInfo.phone}
                                 />
                             </Box>
                         </Flex>
@@ -112,7 +172,9 @@ const Page = () => {
                                 alignItems={"flex-start"}
                                 alignSelf={"stretch"}
                             >
-                                <Input type="password" name="password" placeholder={"......."}
+                                <Input type="text" name="password"
+                                    onChange={loginInputHandler}
+                                    placeholder={"......."}
                                     color={"var(--gray-500, #667085)"}
                                     fontFamily={"Inter"}
                                     fontSize={{ sm: "14px", '2xl': "16px" }}
@@ -122,6 +184,7 @@ const Page = () => {
                                     borderRadius={{ sm: "2px", '2xl': "4px" }}
                                     border={"1px solid var(--gray-200, #E2E8F0)"}
                                     background={"var(--white, #FFF)"}
+                                    value={loginInfo.password}
                                 />
                             </Box>
                         </Flex>
@@ -146,8 +209,12 @@ const Page = () => {
                             fontWeight={600}
                             lineHeight={"24px"}
                             _hover={{ background: "none" }}
+                            onClick={loginHanlder}
                         >Sign in</Button>
                     </Box>
+                        <Link href={"/forgetPassword"}>
+                            Forget password
+                        </Link>
                 </Box>
 
             </Flex>
