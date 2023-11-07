@@ -276,7 +276,6 @@ const Popup = () => {
                                                                     justifyContent={"center"}
                                                                     alignItems={"center"}
                                                                     height={{ sm: '20px', md: "20px", lg: "22px", xl: "24px", '2xl': "24px" }}
-                                                                    width={{ sm: '', '2xl': "97px" }}
                                                                     padding={{ sm: '0px 6px', md: "0px 6px", lg: "0px 7px", xl: "0px 8px", '2xl': "0px 8px" }}
                                                                     gap={{ sm: "2px", '2xl': "6px" }}
                                                                     borderRadius={"39px"}
@@ -392,9 +391,9 @@ const Popup = () => {
                                         fontFamily={"Inter"}
                                         fontSize={{ sm: "12px", md: "14px", '2xl': "14px" }}
                                         fontStyle={"normal"}
-                                        fontWeight={"600"}
+                                        fontWeight={{ sm: "500", md: "550", "2xl": "600"}}
                                         lineHeight={"20px"}
-                                        isDisabled={false}
+                                        isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
                                         borderRadius={"6px"}
                                     >
