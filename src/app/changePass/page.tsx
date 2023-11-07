@@ -5,17 +5,17 @@ import { CognitoIdentityProviderClient, RespondToAuthChallengeCommand } from "@a
 
 const Page = () => {
     const [newPassword, setNewPassword] = useState('');
-    const { username, setUsername, session, setSession } = useFormData();
+    const { userData, setUserData } = useFormData();
 
     const params: any = {
         ChallengeName: 'NEW_PASSWORD_REQUIRED',
         ClientId: '1727702mdj4021tmc218s3efab',
         ChallengeResponses: {
             NEW_PASSWORD: newPassword,
-            USERNAME: username,
-            SESSION: session
+            USERNAME: userData.username,
+            SESSION: userData.session
         },
-        Session: session
+        Session: userData.session
     }
 
     const handleChangePassword = async () => {

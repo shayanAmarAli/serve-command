@@ -16,7 +16,7 @@ export function Providers({
   return (
     <FormProvider>
       <CacheProvider>
-        <ChakraProvider theme={theme} resetCSS={true} disableGlobalStyle={true} >
+        <ChakraProvider theme={theme} >
           {children}
         </ChakraProvider>
       </CacheProvider>

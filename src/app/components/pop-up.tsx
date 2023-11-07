@@ -1,68 +1,43 @@
 "use client"
 import {
-    Box, Button, Text, Image, Heading, Flex,
-    Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter,
-    Input, background, useDisclosure
+    Box, Button, Text, Image, Heading, Flex, Modal, ModalOverlay, ModalContent, Input, useDisclosure
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const Popup = ({ close }: any) => {
-    // const [isOpen, setIsOpen] = useState(false);
+const Popup = () => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [fileName, setFileName] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure()
-    // const readFileContent = (file: any) => {
-    //     return new Promise((resolve, reject) => {
-    //       const reader = new FileReader();
-    //       reader.onload = (event: any) => {
-    //         resolve(event.target.result); // The file content will be available here
-    //       };
-    //       reader.onerror = (error) => {
-    //         reject(error);
-    //       };
-    //       reader.readAsText(file); // You can also use readAsArrayBuffer for binary files
-    //     });
-    //   };
-    // const handleFileUpload = async (event: any) => {
-    //     const file = event.target.files[0];
-    //     file && setIsFileUploaded(true);
-    //     if (file) {
-    //         try {
-    //           const fileContent = await readFileContent(file);
-    //           console.log(file.name ,'has content:', fileContent);
-    //         } catch (error) {
-    //           console.error('Error reading file:', error);
-    //         }
-    //       }
-    // };
-    const handleFileUpload = async (event: any) => {
-        const file = await event.target.files[0];
-        file && setIsFileUploaded(true);
-        file && setFileName(file.name);
-        if (file && file.size > 0) {
-            const formData = new FormData(); // creates a new instance of the FormData object.
-            formData.append('file', file); // appends the selected file to the FormData object. 
-            if (formData.has('file')) {
-                console.log('File has been appended to FormData.', file.name);
-            } else {
-                console.log('No file has been appended to FormData.');
-            }
-            // try {
-            //     const response = await fetch('http://localhost:3000/upload', {
-            //         method: 'POST',
-            //         body: uploadedFile,
-            //     });
 
-            //     if (response.ok) {
-            //         console.log('File uploaded successfully!');
-            //     } else {
-            //         console.error('File upload failed.');
-            //     }
-            // } catch (error) {
-            //     console.error('Error uploading file:', error);
-            // }
+    const handleFileUpload = async (event: any) => {
+        const uploadedFile = await event.target.files[0];
+        uploadedFile && setIsFileUploaded(true);
+        uploadedFile && setFileName(uploadedFile.name);
+
+        if (uploadedFile && uploadedFile.size > 0) {
+                try {
+                    const response = await
+                        fetch(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`, {
+                            method: 'GET',
+                        });
+                    if (response.ok) {
+                        console.log('File name uploaded and generated presignedurl successfully!', response.url);
+                        const PUT_Response = await fetch(response.url, {
+                            method: 'PUT',
+                            body: uploadedFile,
+                            headers: {
+                                'Content-Type': uploadedFile.type,
+                            },
+                        });
+                        PUT_Response.ok && console.log("File upload successfully-->", PUT_Response )
+                    } else {
+                        console.error('File upload failed.');
+                    }
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                }
         } else {
-            console.log("Opppps Belanders happens");
+            console.log("Please select file to upload");
         }
     };
 
@@ -97,37 +72,31 @@ const Popup = ({ close }: any) => {
                 </Text>
             </Button>
             <Box
-                // display={"flex"}
-                // flexDir={"column"}
-                // justifyContent={"center"}
-                // alignItems={"center"}
                 hidden
-                // height={"100vh"}
-                // width={{ 'sm': "95%", ml: "90%", md: "auto", '2xl': "900px" }}
             >
-                <Modal isOpen={isOpen} onClose={onClose} size={{sm: "sm", md: 'lg', lg: "xl", '2xl': '4xl'}} isCentered>
+                <Modal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    size={{ sm: "sm", md: 'lg', lg: "xl", '2xl': '4xl' }}
+                    isCentered >
                     <ModalOverlay />
                     <ModalContent
                         display={"flex"}
-                        flexDir={"column"} 
+                        flexDir={"column"}
                         margin={"auto"}
-                        borderRadius={{ sm: "14px", '2xl': '20px' }}
                         width={{ 'sm': "95%", ml: "90%", md: "auto", '2xl': "900px" }}
+                        borderRadius={{ sm: "14px", '2xl': '20px' }}
                     >
-                        {/* <ModalBody width={{ 'sm': "95%", ml: "90%", md: "auto", '2xl': "900px" }}> */}
                         <Box
                             display={"flex"}
-                            width={{ 'sm': "100%", ml: "100%", md: "auto", '2xl': "900px" }}
-                            // height={"50vh"}
-                            padding={{ sm: "12px 14px", 'md': "16px 20px", 'lg': "20px 28px", 'xl': "26px 34px", '2xl': "32px 40px" }}
                             flexDir={"column"}
                             justifyContent={"center"}
                             alignItems={"flex-start"}
+                            width={{ 'sm': "100%", ml: "100%", md: "auto", '2xl': "900px" }}
+                            padding={{ sm: "12px 14px", 'md': "16px 20px", 'lg': "20px 28px", 'xl': "26px 34px", '2xl': "32px 40px" }}
                             gap={{ sm: '4px', '2xl': "8px" }}
                             borderRadius={{ sm: "14px", '2xl': '20px' }}
                             background={"var(--white, #FFF)"}
-                        border={"1px solid black"}
-                        // margin={"auto"}
                         >
                             <Box
                                 display={"flex"}
@@ -149,12 +118,13 @@ const Popup = ({ close }: any) => {
                                         flexShrink={0}
                                     >
                                         <Image src={"/info-circle.svg"} alt={"logo"}
-                                            flexShrink={0} width={{ sm: "16px", '2xl': "24px" }}
+                                            flexShrink={0}
+                                            width={{ sm: "16px", '2xl': "24px" }}
                                             height={{ sm: "16px", '2xl': "24px" }}
                                         />
                                     </Box>
                                     <Box
-                                        width={{ sm: "", "2xl": "768px" }}
+                                        width={{ "2xl": "768px" }}
                                     >
                                         <Heading
                                             fontSize={{ sm: "16px", '2xl': "24px" }}
@@ -180,7 +150,7 @@ const Popup = ({ close }: any) => {
                                 </Flex>
                                 <Box>
                                     <Flex
-                                        flexDirection={"column"}
+                                        flexDir={"column"}
                                         gap={{ sm: '6px', '2xl': "16px" }}
                                     >
                                         <Heading
@@ -188,7 +158,7 @@ const Popup = ({ close }: any) => {
                                             fontSize={{ sm: "14px", '2xl': "16px" }}
                                             fontStyle={"normal"}
                                             fontWeight={"500"}
-                                            lineHeight={{ sm: "24px", '2xl': "24px" }}
+                                            lineHeight={"24px"}
                                             fontFamily={"Inter"}
                                         >
                                             Step 1. Create Hindsite Backup
@@ -235,7 +205,7 @@ const Popup = ({ close }: any) => {
                                         </Box>
                                         <Flex
                                             flexDir={"column"}
-                                            gap={{ sm: "12px", '2xl': '32px' }}
+                                            gap={{ sm: "12px", md: "20px", lg: "24px", xl: "28px", '2xl': '32px' }}
                                         >
                                             <Heading
                                                 color={"var(--black-alpha-900, rgba(0, 0, 0, 0.92))"}
@@ -256,7 +226,7 @@ const Popup = ({ close }: any) => {
                                                         flexDir={"column"}
                                                         justifyContent={"center"}
                                                         alignItems={"center"}
-                                                        gap={{ sm: "", '2xl': '10px' }}
+                                                        gap={{ sm: "4px", md: "5px", lg: "6px", xl: "8px", '2xl': '10px' }}
                                                         alignSelf={"stretch"}
                                                         borderRadius={{ sm: "6px", md: "8px", '2xl': '8px' }}
                                                         border={"2px dashed var(--black-alpha-300, rgba(0, 0, 0, 0.16))"}
@@ -264,10 +234,11 @@ const Popup = ({ close }: any) => {
                                                     // margin={"auto"}
                                                     >
 
-                                                        <Flex flexDir={"column"}
-                                                            gap={{ sm: "4px", '2xl': "8px" }}
+                                                        <Flex
+                                                            flexDir={"column"}
                                                             justifyContent={"center"}
                                                             alignItems={"center"}
+                                                            gap={{ sm: "4px", md: "6px", lg: "7px", xl: "8px", '2xl': "8px" }}
                                                         >
                                                             <Box
                                                                 display={"flex"}
@@ -285,13 +256,15 @@ const Popup = ({ close }: any) => {
                                                                     style={{ fill: "#FFFFFF" }}
                                                                 />
                                                             </Box>
-                                                            <Flex flexDir={"column"}
-                                                                gap={{ sm: "4px", '2xl': "10px" }} justifyContent={"center"}
+                                                            <Flex
+                                                                flexDir={"column"}
+                                                                gap={{ sm: "4px", md: "6px", lg: "7px", xl: "8px", '2xl': "10px" }}
+                                                                justifyContent={"center"}
                                                                 alignItems={"center"}>
                                                                 <Text
                                                                     color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
                                                                     fontFamily={"Inter"}
-                                                                    fontSize={{ sm: "14px", '2xl': "18px" }}
+                                                                    fontSize={{ sm: "14px", md: "16px", lg: "17px", xl: "18px", '2xl': "18px" }}
                                                                     fontStyle={"normal"}
                                                                     fontWeight={"500"}
                                                                     lineHeight={"28px"}
@@ -300,15 +273,15 @@ const Popup = ({ close }: any) => {
                                                                 </Text>
                                                                 <Box
                                                                     display={"flex"}
-                                                                    height={{ sm: '20px', md: "20px", lg: "22px", xl: "24px", '2xl': "24px" }}
-                                                                    padding={{ sm: '0px 6px', md: "0px 6px", lg: "0px 7px", xl: "0px 8px", '2xl': "0px 8px" }}
                                                                     justifyContent={"center"}
                                                                     alignItems={"center"}
+                                                                    height={{ sm: '20px', md: "20px", lg: "22px", xl: "24px", '2xl': "24px" }}
+                                                                    width={{ sm: '', '2xl': "97px" }}
+                                                                    padding={{ sm: '0px 6px', md: "0px 6px", lg: "0px 7px", xl: "0px 8px", '2xl': "0px 8px" }}
                                                                     gap={{ sm: "2px", '2xl': "6px" }}
                                                                     borderRadius={"39px"}
                                                                     border={" 1px solid var(--green-500, #38A169)"}
                                                                     background={"var(--white, #FFF)"}
-                                                                    width={{ sm: '', '2xl': "97px" }}
                                                                 >
                                                                     <Text
                                                                         color={"var(--green-500, #38A169)"}
@@ -330,12 +303,12 @@ const Popup = ({ close }: any) => {
                                                     </Box>
                                                     : <Box
                                                         display={"flex"}
-                                                        padding={{ sm: "4px", md: "6px", lg: "8px", xl: "10px", '2xl': '10px' }}
-                                                        height={{ sm: "70px", mm: "85px", ml: "90px", md: "95px", lg: "100px", xl: "110px", '2xl': '120px' }}
                                                         flexDir={"column"}
                                                         justifyContent={"center"}
                                                         alignItems={"center"}
-                                                        gap={{ sm: "", '2xl': '10px' }}
+                                                        gap={{ sm: "4px", md: "5px", lg: "6px", xl: "8px", '2xl': '10px' }}
+                                                        padding={{ sm: "4px", md: "6px", lg: "8px", xl: "10px", '2xl': '10px' }}
+                                                        height={{ sm: "70px", mm: "85px", ml: "90px", md: "95px", lg: "100px", xl: "110px", '2xl': '120px' }}
                                                         alignSelf={"stretch"}
                                                         borderRadius={{ sm: "6px", md: "8px", '2xl': '8px' }}
                                                         border={"2px dashed var(--black-alpha-300, rgba(0, 0, 0, 0.16))"}
@@ -343,11 +316,11 @@ const Popup = ({ close }: any) => {
                                                     >
                                                         <Box
                                                             display={"flex"}
-                                                            height={{ sm: "24px", mm: "26px", ml: "27px", md: "28px", lg: "32px", xl: "36px", '2xl': '40px' }}
-                                                            padding={{ sm: "0px 10px", md: "0px 12px", lg: "0px 14px", xl: "0px 16px", '2xl': '0px 16px' }}
                                                             justifyContent={"center"}
                                                             alignItems={"center"}
+                                                            padding={{ sm: "0px 10px", md: "0px 12px", lg: "0px 14px", xl: "0px 16px", '2xl': '0px 16px' }}
                                                             gap={{ sm: "6px", md: "7px", lg: "8px", '2xl': '8px' }}
+                                                            height={{ sm: "24px", mm: "26px", ml: "27px", md: "28px", lg: "32px", xl: "36px", '2xl': '40px' }}
                                                             flexShrink={0}
                                                             borderRadius={{ sm: "4px", md: "4px", '2xl': '6px' }}
                                                             border={"1px solid var(--primary-main, #11190C)"}
@@ -389,14 +362,14 @@ const Popup = ({ close }: any) => {
                                     </Flex>
                                 </Box>
                                 <Flex
-                                    gap={{ sm: "10px", '2xl': "16px" }}
+                                    gap={{ sm: "10px", md: "12px", lg: "13px", xl: "14px", '2xl': "16px" }}
                                 >
                                     <Button
                                         display={"flex"}
-                                        height={{ sm: '', '2xl': '32px' }}
-                                        padding={{ sm: '4px', '2xl': '0px 12px' }}
                                         justifyContent={"center"}
                                         alignItems={"center"}
+                                        height={{ sm: '', '2xl': '32px' }}
+                                        padding={{ sm: '4px', '2xl': '0px 12px' }}
                                         gap={{ sm: "4px", '2xl': "8px" }}
                                         borderRadius={"6px"}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
@@ -406,51 +379,30 @@ const Popup = ({ close }: any) => {
                                         fontStyle={"normal"}
                                         fontWeight={"600"}
                                         lineHeight={"20px"}
-                                    // onClick={close}
                                     >cancel</Button>
-                                    <Box
+                                    <Button
+                                        display={"flex"}
+                                        alignItems={"center"}
+                                        justifyContent={"center"}
+                                        height={{ sm: '', '2xl': '32px' }}
+                                        padding={{ sm: '4px', '2xl': '0px 12px' }}
+                                        gap={{ sm: "4px", md: "5px", lg: "6px", xl: "8px", '2xl': "8px" }}
+                                        className="bg-btn"
+                                        color={"#FFF"}
+                                        fontFamily={"Inter"}
+                                        fontSize={{ sm: "12px", md: "14px", '2xl': "14px" }}
+                                        fontStyle={"normal"}
+                                        fontWeight={"600"}
+                                        lineHeight={"20px"}
+                                        isDisabled={false}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
-                                        // bg="#11190C"
                                         borderRadius={"6px"}
-                                        _disabled={{
-                                            background: "#11190C",
-                                            color: "#E2E8F0",
-                                            _hover: {
-                                                background: "none"
-                                            }
-                                        }}
                                     >
-                                        <Button
-                                            display={"flex"}
-                                            height={{ sm: '', '2xl': '32px' }}
-                                            padding={{ sm: '4px', '2xl': '0px 12px' }}
-                                            justifyContent={"center"}
-                                            alignItems={"center"}
-                                            gap={{ sm: "4px", '2xl': "8px" }}
-                                            // onClick={() => setIsOpen(false)}
-                                            fontFamily={"Inter"}
-                                            fontSize={{ sm: "12px", '2xl': "14px" }}
-                                            fontStyle={"normal"}
-                                            fontWeight={"600"}
-                                            lineHeight={"20px"}
-                                            isDisabled={isFileUploaded && false}
-                                            textColor="#FFFF"
-                                            bg="#11190C"
-                                            borderRadius={"6px"}
-                                            _disabled={{
-                                                background: "none",
-                                                color: "#E2E8F0",
-                                            }}
-                                        >
-                                            begin import
-                                        </Button>
-
-                                    </Box>
+                                        begin import
+                                    </Button>
                                 </Flex>
                             </Box>
                         </Box >
-                            
-                        {/* </ModalBody> */}
                     </ModalContent>
                 </Modal>
             </Box>

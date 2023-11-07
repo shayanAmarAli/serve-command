@@ -6,7 +6,6 @@ import Popup from './pop-up'
 const sidebar = () => {
   return (
     <Flex
-      bgColor={{ "xxl": "blackAlpha.400", "2xl": "red" }}
       height={"100vh"}
     >
       {/* sidebar */}
@@ -166,7 +165,6 @@ const sidebar = () => {
             >
               Import data from the following tools in a few clicks.
             </Text>
-
           </Box>
 
           <Button
@@ -201,7 +199,7 @@ const sidebar = () => {
           width={{ sm: "90%", md: "95%", '2xl': '1800px' }}
           gap={{ sm: "", '2xl': '8px' }}
           paddingTop={{ sm: "10px", '2xl': "16px" }}
-          paddingLeft={{sm: "18px", md: "22px", lg: "28px", xl: "30px", '2xl': 'px 32px' }}
+          paddingLeft={{ sm: "18px", md: "22px", lg: "28px", xl: "30px", '2xl': 'px 32px' }}
         >
           <Box
             display={"flex"}

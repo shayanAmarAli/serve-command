@@ -2,11 +2,9 @@
 import { Box, Button, Flex, Heading, Image, Input, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import {
-    CognitoIdentityProviderClient, AdminInitiateAuthCommand,
-    RespondToAuthChallengeCommand,
+    CognitoIdentityProviderClient, RespondToAuthChallengeCommand,
     InitiateAuthCommand, ChangePasswordCommand,
-    ForgotPasswordCommand,
-    ConfirmForgotPasswordCommand
+    ForgotPasswordCommand, ConfirmForgotPasswordCommand
 } from "@aws-sdk/client-cognito-identity-provider"
 import { useRouter } from "next/navigation";
 import { useFormData } from '@/app/context/authContext';
@@ -45,21 +43,19 @@ const Page = () => {
     const cognitoClient = new CognitoIdentityProviderClient({
         region: "us-east-1"
     })
-    const adminInitiateAuthCommand = new InitiateAuthCommand(params)
+    const initiateAuthCommand = new InitiateAuthCommand(params)
 
     const cogCLIent = async () => {
         setUsername(loginInfo.phone);
         console.log('usename is updated into context---->', username)
         try {
-            const response = await cognitoClient.send(adminInitiateAuthCommand)
+            const response = await cognitoClient.send(initiateAuthCommand)
             console.log(response);
             setSession(response.Session);
             // session && router.push('/changePass')
-
         } catch (err) {
             console.log(err)
         }
-
     }
 
     const params2: any = {
@@ -102,36 +98,36 @@ const Page = () => {
 
     const confirmForgotPassword = async (email: string, newPassword: string) => {
         const params = {
-          ClientId: "1727702mdj4021tmc218s3efab",
-          ConfirmationCode: "520227",
-          Password: newPassword,
-          Username: email,
+            ClientId: "1727702mdj4021tmc218s3efab",
+            ConfirmationCode: "520227",
+            Password: newPassword,
+            Username: email,
         };
-      
+
         try {
-          const response = await cognitoClient.send(new ConfirmForgotPasswordCommand(params));
-          console.log(response);
+            const response = await cognitoClient.send(new ConfirmForgotPasswordCommand(params));
+            console.log(response);
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
-      };
+    };
 
     return (
         <>
             {/* <Box > */}
-                {/* <Input
-                    name={"phone"}
-                    onChange={loginInfohandler}
-                    value={loginInfo.phone}
-                />
-                <Input
-                    name={"password"}
-                    onChange={loginInfohandler}
-                    value={loginInfo.password}
-                />
-                <Button onClick={cogCLIent}>submit</Button> */}
-                
-                        {/* <Box>
+            <Input
+                name={"phone"}
+                onChange={loginInfohandler}
+                value={loginInfo.phone}
+            />
+            <Input
+                name={"password"}
+                onChange={loginInfohandler}
+                value={loginInfo.password}
+            />
+            <Button onClick={cogCLIent}>submit</Button>
+
+            {/* <Box>
                             this is the change passowrd route
                             <Input onChange={(e: any) => {
                                 setNewPassword(e.target.value)
@@ -141,20 +137,20 @@ const Page = () => {
                             <Button onClick={handleChangePassword}>continue</Button>
                         </Box> */}
             {/* </Box> */}
-            <Box>
+            {/*<Box>
                 <Input onChange={(e: any) => {
                     setForPass(e.target.value)
                 }} />
                 <Button onClick={forgotPassword}>forget pass</Button>
-                {/* <Input onChange={(e: any) => {
+                 <Input onChange={(e: any) => {
                     setConfirmForPass(e.target.value)
                 }} />
                 <Button
                 onClick={()=>{
                     confirmForgotPassword('+923468742593', confirmForPass)
                 }}
-                >set new pass</Button> */}
-            </Box>
+                >set new pass</Button> 
+            </Box> */}
         </>
     )
 }
