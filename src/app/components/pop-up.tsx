@@ -9,9 +9,7 @@ const Popup = () => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [fileName, setFileName] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [preSigned, setPreSigned] = useState<any>();
-    const [uploadedFile, setFileUploaded] = useState()
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<any>();
     // const handleFileUpload = async (event: any) => {
     //     const uploadedFile = await event.target.files[0];
     //     uploadedFile && setIsFileUploaded(true);
@@ -55,6 +53,9 @@ const Popup = () => {
     const handleFileChange = (event: any) => {
         const selectedFile = event.target.files && event.target.files[0];
         setFile(selectedFile);
+        file && setIsFileUploaded(true)
+        console.log(file);
+        setFileName(selectedFile.name)
     };
 
     const handleFileUpload = async () => {
@@ -444,7 +445,7 @@ const Popup = () => {
                                         fontStyle={"normal"}
                                         fontWeight={{ sm: "500", md: "550", "2xl": "600" }}
                                         lineHeight={"20px"}
-                                        isDisabled={isFileUploaded ? false : true}
+                                        // isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
                                         borderRadius={"6px"}
                                         onClick={handleFileUpload}
