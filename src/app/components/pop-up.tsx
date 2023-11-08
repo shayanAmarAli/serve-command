@@ -11,43 +11,85 @@ const Popup = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [preSigned, setPreSigned] = useState<any>();
     const [uploadedFile, setFileUploaded] = useState()
+    const [file, setFile] = useState<File | null>(null);
+    // const handleFileUpload = async (event: any) => {
+    //     const uploadedFile = await event.target.files[0];
+    //     uploadedFile && setIsFileUploaded(true);
+    //     uploadedFile && setFileName(uploadedFile.name);
+    //     setFileUploaded(uploadedFile)
+    //     console.log(uploadedFile.name)
 
-    const handleFileUpload = async (event: any) => {
-        const uploadedFile = await event.target.files[0];
-        uploadedFile && setIsFileUploaded(true);
-        uploadedFile && setFileName(uploadedFile.name);
-        setFileUploaded(uploadedFile)
-        console.log(uploadedFile.name)
-        if (uploadedFile && uploadedFile.size > 0) {
-            try {
-                const response = await
-                    fetch(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`, {
-                        method: "GET"
-                    });
-                const getApiResponse = await response.json();
-                setPreSigned(getApiResponse)
+    //     const fileUploadHandler = async () => {
+    //         if (!uploadedFile.name) {
+    //             alert("Please select a file to upload");
+    //             return;
+    //         }
+    
+    //         try {
+    //             const response = await fetch(
+    //                 `https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${file.name}&contentType=text/plain`
+    //             );
+    //             const data = await response.json();
+    //             console.log(data)
+    //             if (data.uploadUrl) {
+    //                 const uploadResponse = await fetch(data.uploadUrl, {
+    //                     method: "PUT",
+    //                     body: uploadedFile,
+    //                 });
+    
+    //                 if (uploadResponse.ok) {
+    //                     alert("File uploaded successfully!");
+    //                 } else {
+    //                     alert("File upload failed");
+    //                 }
+    //             } else {
+    //                 alert("Failed to get pre-signed URL");
+    //             }
+    //         } catch (error) {
+    //             console.error("Error uploading file:", error);
+    //             alert("An error occurred while uploading the file.");
+    //         }
+    //     };
+    // };
+    
+    const handleFileChange = (event: any) => {
+        const selectedFile = event.target.files && event.target.files[0];
+        setFile(selectedFile);
+    };
 
-            } catch (error) {
-                console.error('Error uploading file--->', error);
+    const handleFileUpload = async () => {
+        if (!file) {
+            alert("Please select a file to upload");
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${file.name}&contentType=text/plain`
+            );
+            const data = await response.json();
+            console.log(data)
+            if (data.uploadUrl) {
+                const uploadResponse = await fetch(data.uploadUrl, {
+                    method: "PUT",
+                    body: file,
+                });
+
+                if (uploadResponse.ok) {
+                    alert("File uploaded successfully!");
+                } else {
+                    alert("File upload failed");
+                }
+            } else {
+                alert("Failed to get pre-signed URL");
             }
-        } else {
-            console.log("Please select file to upload");
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            alert("An error occurred while uploading the file.");
         }
     };
 
-    const fileUploadHandler = async () => {
-        try {
-            const putApiResponse = await fetch(preSigned.uploadUrl, {
-                method: "PUT",
-                body: uploadedFile
-            })
-            putApiResponse.ok ?
-                console.log("FILE UPLOAD INTO BUCKET!!", putApiResponse) :
-                console.log("Error in uploading file", putApiResponse)
-        } catch (error) {
-            console.log("ERROR", error);
-        }
-    }
+    
 
     return (
         <>
@@ -353,7 +395,7 @@ const Popup = () => {
                                                                     Upload Backup Files
                                                                 </Text>
                                                                 <Input id="file-input" type="file" accept="text/plain"
-                                                                    onChange={handleFileUpload}
+                                                                    onChange={handleFileChange}
                                                                     style={{ display: "none" }} />
                                                             </Box>
                                                             <Box
@@ -405,7 +447,7 @@ const Popup = () => {
                                         isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
                                         borderRadius={"6px"}
-                                        onClick={fileUploadHandler}
+                                        onClick={handleFileUpload}
                                     >
                                         begin import
                                     </Button>
