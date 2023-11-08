@@ -8,12 +8,15 @@ import axios from "axios"
 const Popup = () => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [fileName, setFileName] = useState("")
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [preSigned, setPreSigned] = useState("");
+    const [uploadedFile, setFileUploaded] = useState()
 
     const handleFileUpload = async (event: any) => {
         const uploadedFile = await event.target.files[0];
         uploadedFile && setIsFileUploaded(true);
         uploadedFile && setFileName(uploadedFile.name);
+        setFileUploaded(uploadedFile)
 console.log(uploadedFile.name)
         if (uploadedFile && uploadedFile.size > 0) {
             try {
@@ -23,26 +26,27 @@ console.log(uploadedFile.name)
                 const preSigned = response.data.uploadUrl;
                 if (response.data) {
                     console.log('File name uploaded and generated presignedurl successfully!', response.data.uploadUrl);
-                    console.log("Ready file to upload file", uploadedFile)
+                    console.log("Ready file to upload file", uploadedFile);
+                    setPreSigned(preSigned);
                     // const PUT_Response = await axios.put(preSigned, uploadedFile, {
                     //     headers: {
                     //         'Content-Type': uploadedFile.type,
                     //     }
                     // });
 
-                    const PUT_Response = await fetch(preSigned, {
-                        method: "PUT",
-                        body: uploadedFile,
-                        headers: {
-                            'Content-Type': uploadedFile.type
-                        }
-                    });
+                    // const PUT_Response = await fetch(preSigned, {
+                    //     method: "PUT",
+                    //     body: uploadedFile,
+                    //     headers: {
+                    //         'Content-Type': uploadedFile.type
+                    //     }
+                    // });
 
-                    if (PUT_Response.ok) {
-                        console.log("File upload successfully-->", PUT_Response.ok)
-                    } else {
-                        console.log("PUT REQUEST FAILED")
-                    }
+                    // if (PUT_Response.data) {
+                    //     console.log("File upload successfully-->", PUT_Response.data)
+                    // } else {
+                    //     console.log("PUT REQUEST FAILED")
+                    // }
                 } else {
                     console.error('File upload failed.');
                 }
@@ -53,6 +57,22 @@ console.log(uploadedFile.name)
             console.log("Please select file to upload");
         }
     };
+
+    const sendFile = async() => {
+        if (!preSigned && !uploadedFile){
+            console.log("File or url missing")
+        }
+        try {
+            await axios.put(preSigned, uploadedFile, {
+                headers: {
+                    "Content-Type": "text/plain"
+                }
+            })
+            console.log("FIle is uploadeddddd->>")
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <>
@@ -410,6 +430,7 @@ console.log(uploadedFile.name)
                                         isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
                                         borderRadius={"6px"}
+                                        onClick={sendFile}
                                     >
                                         begin import
                                     </Button>

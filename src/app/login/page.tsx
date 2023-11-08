@@ -27,8 +27,8 @@ const Page = () => {
 
     const params: any = {
         AuthFlow: 'USER_PASSWORD_AUTH',
-        ClientId: '1727702mdj4021tmc218s3efab',
-        UserPoolId: 'us-east-1_DIwOdU2TN',
+        ClientId: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID,
+        UserPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
         AuthParameters: {
             USERNAME: loginInfo.phone,
             PASSWORD: loginInfo.password
@@ -37,7 +37,7 @@ const Page = () => {
 
     // defining region of cognito
     const cognitoClient = new CognitoIdentityProviderClient({
-        region: "us-east-1"
+        region: process.env.NEXT_PUBLIC_COGNITO_REGION
     })
 
     // initiate authentication of a user

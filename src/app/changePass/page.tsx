@@ -10,7 +10,7 @@ const Page = () => {
 
     const params: any = {
         ChallengeName: 'NEW_PASSWORD_REQUIRED',
-        ClientId: '1727702mdj4021tmc218s3efab',
+        ClientId: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID,
         ChallengeResponses: {
             NEW_PASSWORD: newPassword,
             USERNAME: userData.username,
@@ -21,7 +21,7 @@ const Page = () => {
 
     const handleChangePassword = async () => {
         const cognitoClient = new CognitoIdentityProviderClient({
-            region: "us-east-1"
+            region: process.env.NEXT_PUBLIC_COGNITO_REGION
         })
         const respondToAuthChallengeCommand = new RespondToAuthChallengeCommand(params)
 
