@@ -60,7 +60,7 @@ const Page = () => {
 
     const params2: any = {
         ChallengeName: 'NEW_PASSWORD_REQUIRED',
-        ClientId: '1727702mdj4021tmc218s3efab',
+        ClientId: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID,
         ChallengeResponses: {
             NEW_PASSWORD: newPassword,
             USERNAME: "+923468742593",
@@ -70,7 +70,7 @@ const Page = () => {
     }
     const handleChangePassword = async () => {
         const cognitoClient = new CognitoIdentityProviderClient({
-            region: "us-east-1"
+            region: process.env.NEXT_PUBLIC_COGNITO_REGION
         })
         console.log(params2);
         const respondToAuthChallengeCommand = new RespondToAuthChallengeCommand(params2)
@@ -84,7 +84,7 @@ const Page = () => {
     }
     const forgotPassword = async (email: any) => {
         const params = {
-            ClientId: "1727702mdj4021tmc218s3efab",
+            ClientId: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID,
             Username: forPass,
         };
 
@@ -96,12 +96,12 @@ const Page = () => {
         }
     };
 
-    const confirmForgotPassword = async (email: string, newPassword: string) => {
+    const confirmForgotPassword = async (phone: string, newPassword: string) => {
         const params = {
-            ClientId: "1727702mdj4021tmc218s3efab",
+            ClientId: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID,
             ConfirmationCode: "520227",
             Password: newPassword,
-            Username: email,
+            Username: phone,
         };
 
         try {
