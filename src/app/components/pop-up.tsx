@@ -28,11 +28,11 @@ console.log(uploadedFile.name)
                     console.log('File name uploaded and generated presignedurl successfully!', response.data.uploadUrl);
                     console.log("Ready file to upload file", uploadedFile);
                     setPreSigned(preSigned);
-                    // const PUT_Response = await axios.put(preSigned, uploadedFile, {
-                    //     headers: {
-                    //         'Content-Type': uploadedFile.type,
-                    //     }
-                    // });
+                    const PUT_Response = await axios.put(preSigned, uploadedFile, {
+                        headers: {
+                            'Content-Type': uploadedFile.type,
+                        }
+                    });
 
                     // const PUT_Response = await fetch(preSigned, {
                     //     method: "PUT",
@@ -42,11 +42,11 @@ console.log(uploadedFile.name)
                     //     }
                     // });
 
-                    // if (PUT_Response.data) {
-                    //     console.log("File upload successfully-->", PUT_Response.data)
-                    // } else {
-                    //     console.log("PUT REQUEST FAILED")
-                    // }
+                    if (PUT_Response.data) {
+                        console.log("File upload successfully-->", PUT_Response.data)
+                    } else {
+                        console.log("PUT REQUEST FAILED")
+                    }
                 } else {
                     console.error('File upload failed.');
                 }
