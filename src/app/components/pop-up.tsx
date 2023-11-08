@@ -9,70 +9,87 @@ const Popup = () => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [fileName, setFileName] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [preSigned, setPreSigned] = useState("");
+    const [preSigned, setPreSigned] = useState<any>();
     const [uploadedFile, setFileUploaded] = useState()
+    const [file, setFile] = useState<File | null>(null);
+    // const handleFileUpload = async (event: any) => {
+    //     const uploadedFile = await event.target.files[0];
+    //     uploadedFile && setIsFileUploaded(true);
+    //     uploadedFile && setFileName(uploadedFile.name);
+    //     setFileUploaded(uploadedFile)
+    //     console.log(uploadedFile.name)
 
-    const handleFileUpload = async (event: any) => {
-        const uploadedFile = await event.target.files[0];
-        uploadedFile && setIsFileUploaded(true);
-        uploadedFile && setFileName(uploadedFile.name);
-        setFileUploaded(uploadedFile)
-console.log(uploadedFile.name)
-        if (uploadedFile && uploadedFile.size > 0) {
-            try {
-                const response = await
-                    axios.get(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`);
+    //     const fileUploadHandler = async () => {
+    //         if (!uploadedFile.name) {
+    //             alert("Please select a file to upload");
+    //             return;
+    //         }
+    
+    //         try {
+    //             const response = await fetch(
+    //                 `https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${file.name}&contentType=text/plain`
+    //             );
+    //             const data = await response.json();
+    //             console.log(data)
+    //             if (data.uploadUrl) {
+    //                 const uploadResponse = await fetch(data.uploadUrl, {
+    //                     method: "PUT",
+    //                     body: uploadedFile,
+    //                 });
+    
+    //                 if (uploadResponse.ok) {
+    //                     alert("File uploaded successfully!");
+    //                 } else {
+    //                     alert("File upload failed");
+    //                 }
+    //             } else {
+    //                 alert("Failed to get pre-signed URL");
+    //             }
+    //         } catch (error) {
+    //             console.error("Error uploading file:", error);
+    //             alert("An error occurred while uploading the file.");
+    //         }
+    //     };
+    // };
+    
+    const handleFileChange = (event: any) => {
+        const selectedFile = event.target.files && event.target.files[0];
+        setFile(selectedFile);
+    };
 
-                const preSigned = response.data.uploadUrl;
-                if (response.data) {
-                    console.log('File name uploaded and generated presignedurl successfully!', response.data.uploadUrl);
-                    console.log("Ready file to upload file", uploadedFile);
-                    setPreSigned(preSigned);
-                    const PUT_Response = await axios.put(preSigned, uploadedFile, {
-                        headers: {
-                            'Content-Type': uploadedFile.type,
-                        }
-                    });
+    const handleFileUpload = async () => {
+        if (!file) {
+            alert("Please select a file to upload");
+            return;
+        }
 
-                    // const PUT_Response = await fetch(preSigned, {
-                    //     method: "PUT",
-                    //     body: uploadedFile,
-                    //     headers: {
-                    //         'Content-Type': uploadedFile.type
-                    //     }
-                    // });
+        try {
+            const response = await fetch(
+                `https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${file.name}&contentType=text/plain`
+            );
+            const data = await response.json();
+            console.log(data)
+            if (data.uploadUrl) {
+                const uploadResponse = await fetch(data.uploadUrl, {
+                    method: "PUT",
+                    body: file,
+                });
 
-                    if (PUT_Response.data) {
-                        console.log("File upload successfully-->", PUT_Response.data)
-                    } else {
-                        console.log("PUT REQUEST FAILED")
-                    }
+                if (uploadResponse.ok) {
+                    alert("File uploaded successfully!");
                 } else {
-                    console.error('File upload failed.');
+                    alert("File upload failed");
                 }
-            } catch (error) {
-                console.error('Error uploading file--->', error);
+            } else {
+                alert("Failed to get pre-signed URL");
             }
-        } else {
-            console.log("Please select file to upload");
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            alert("An error occurred while uploading the file.");
         }
     };
 
-    const sendFile = async() => {
-        if (!preSigned && !uploadedFile){
-            console.log("File or url missing")
-        }
-        try {
-            await axios.put(preSigned, uploadedFile, {
-                headers: {
-                    "Content-Type": "text/plain"
-                }
-            })
-            console.log("FIle is uploadeddddd->>")
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    
 
     return (
         <>
@@ -378,7 +395,7 @@ console.log(uploadedFile.name)
                                                                     Upload Backup Files
                                                                 </Text>
                                                                 <Input id="file-input" type="file" accept="text/plain"
-                                                                    onChange={handleFileUpload}
+                                                                    onChange={handleFileChange}
                                                                     style={{ display: "none" }} />
                                                             </Box>
                                                             <Box
@@ -411,7 +428,7 @@ console.log(uploadedFile.name)
                                         fontStyle={"normal"}
                                         fontWeight={"600"}
                                         lineHeight={"20px"}
-                                        
+
                                     >cancel</Button>
                                     <Button
                                         display={"flex"}
@@ -430,7 +447,7 @@ console.log(uploadedFile.name)
                                         isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
                                         borderRadius={"6px"}
-                                        onClick={sendFile}
+                                        onClick={handleFileUpload}
                                     >
                                         begin import
                                     </Button>
