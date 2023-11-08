@@ -9,7 +9,7 @@ const Popup = () => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [fileName, setFileName] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [preSigned, setPreSigned] = useState("");
+    const [preSigned, setPreSigned] = useState<any>();
     const [uploadedFile, setFileUploaded] = useState()
 
     const handleFileUpload = async (event: any) => {
@@ -17,39 +17,16 @@ const Popup = () => {
         uploadedFile && setIsFileUploaded(true);
         uploadedFile && setFileName(uploadedFile.name);
         setFileUploaded(uploadedFile)
-console.log(uploadedFile.name)
+        console.log(uploadedFile.name)
         if (uploadedFile && uploadedFile.size > 0) {
             try {
                 const response = await
-                    axios.get(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`);
+                    fetch(`https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${uploadedFile.name}&contentType=text/plain`, {
+                        method: "GET"
+                    });
+                const getApiResponse = await response.json();
+                setPreSigned(getApiResponse)
 
-                const preSigned = response.data.uploadUrl;
-                if (response.data) {
-                    console.log('File name uploaded and generated presignedurl successfully!', response.data.uploadUrl);
-                    console.log("Ready file to upload file", uploadedFile);
-                    setPreSigned(preSigned);
-                    // const PUT_Response = await axios.put(preSigned, uploadedFile, {
-                    //     headers: {
-                    //         'Content-Type': uploadedFile.type,
-                    //     }
-                    // });
-
-                    // const PUT_Response = await fetch(preSigned, {
-                    //     method: "PUT",
-                    //     body: uploadedFile,
-                    //     headers: {
-                    //         'Content-Type': uploadedFile.type
-                    //     }
-                    // });
-
-                    // if (PUT_Response.data) {
-                    //     console.log("File upload successfully-->", PUT_Response.data)
-                    // } else {
-                    //     console.log("PUT REQUEST FAILED", PUT_Response.data)
-                    // }
-                } else {
-                    console.error('File upload failed.');
-                }
             } catch (error) {
                 console.error('Error uploading file--->', error);
             }
@@ -58,19 +35,17 @@ console.log(uploadedFile.name)
         }
     };
 
-    const sendFile = async() => {
-        if (!preSigned && !uploadedFile){
-            console.log("File or url missing")
-        }
+    const fileUploadHandler = async () => {
         try {
-            await axios.put(preSigned, uploadedFile, {
-                headers: {
-                    "Content-Type": "text/plain"
-                }
+            const putApiResponse = await fetch(preSigned.uploadUrl, {
+                method: "PUT",
+                body: uploadedFile
             })
-            console.log("FIle is uploadeddddd->>")
+            putApiResponse.ok ?
+                console.log("FILE UPLOAD INTO BUCKET!!", putApiResponse) :
+                console.log("Error in uploading file", putApiResponse)
         } catch (error) {
-            console.error(error);
+            console.log("ERROR", error);
         }
     }
 
@@ -411,7 +386,7 @@ console.log(uploadedFile.name)
                                         fontStyle={"normal"}
                                         fontWeight={"600"}
                                         lineHeight={"20px"}
-                                        
+
                                     >cancel</Button>
                                     <Button
                                         display={"flex"}
@@ -430,7 +405,7 @@ console.log(uploadedFile.name)
                                         isDisabled={isFileUploaded ? false : true}
                                         border={"1px solid var(--gray-200, #E2E8F0)"}
                                         borderRadius={"6px"}
-                                        onClick={sendFile}
+                                        onClick={fileUploadHandler}
                                     >
                                         begin import
                                     </Button>
