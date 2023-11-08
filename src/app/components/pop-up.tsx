@@ -51,16 +51,17 @@ const Popup = () => {
     // };
     
     const handleFileChange = (event: any) => {
-        const selectedFile = event.target.files && event.target.files[0];
+        const selectedFile = event.target.files[0];
+        console.log("selectedFile is--->", selectedFile.name)
         setFile(selectedFile);
-        file && setIsFileUploaded(true)
+        selectedFile && setIsFileUploaded(true)
         console.log(file);
         setFileName(selectedFile.name)
     };
 
     const handleFileUpload = async () => {
         if (!file) {
-            alert("Please select a file to upload");
+            console.log("Please select a file to upload");
             return;
         }
 
@@ -77,12 +78,12 @@ const Popup = () => {
                 });
 
                 if (uploadResponse.ok) {
-                    alert("File uploaded successfully!");
+                    console.log("File uploaded successfully!");
                 } else {
-                    alert("File upload failed");
+                    console.log("File upload failed");
                 }
             } else {
-                alert("Failed to get pre-signed URL");
+                console.log("Failed to get pre-signed URL");
             }
         } catch (error) {
             console.error("Error uploading file:", error);
