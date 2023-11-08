@@ -45,7 +45,7 @@ console.log(uploadedFile.name)
                     if (PUT_Response.data) {
                         console.log("File upload successfully-->", PUT_Response.data)
                     } else {
-                        console.log("PUT REQUEST FAILED")
+                        console.log("PUT REQUEST FAILED", PUT_Response.data)
                     }
                 } else {
                     console.error('File upload failed.');
