@@ -2,6 +2,7 @@
 import React from 'react'
 import { Box, Heading, Image, Text, Button, Flex } from "@chakra-ui/react"
 import Popup from './pop-up'
+import SelectCategory from './SelectCategory'
 
 const sidebar = () => {
   return (
@@ -227,7 +228,7 @@ const sidebar = () => {
 
                 />
               </Box>
-              <Popup />
+              <SelectCategory />
             </Flex>
             <Flex
               flexDir={"column"}
