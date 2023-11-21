@@ -364,8 +364,8 @@ const SelectCategory = () => {
                                     padding={{ sm: "", "lg": "0px 12px" }}
                                     borderRadius={"6px"}
                                     background={"var(--gray-100, #EDF2F7)"}
-                                        cursor={selected && 'not-allowed'}
-                                        opacity={selected && 0.5}
+                                        cursor={selected ? 'not-allowed': "none"}
+                                        opacity={selected ? 0.5 : "full"}
                                 >
                                     <Box>
                                         <Text
