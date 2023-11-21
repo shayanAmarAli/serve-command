@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import {
     Box, Button, Flex, Heading, Image, Text, chakra,
-    Modal, ModalOverlay, ModalContent, Input, useDisclosure, ModalBody
+    Modal, ModalOverlay, ModalContent, Input, useDisclosure, ModalBody, ModalCloseButton, ModalFooter, ModalHeader
 } from "@chakra-ui/react";
 
 const category = [
@@ -19,17 +19,18 @@ const category = [
 ]
 
 const SelectCategory = () => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false); // Use local state to manage modal open/close
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const [isMouseHover, setIsMouseHover] = useState<boolean>(false);
     const [hoverStates, setHoverStates] = useState<{ [key: number]: boolean }>({});
-    const { onOpen, onClose } = useDisclosure();
+    const [selected, setSelected] = useState<boolean>();
 
     const handleAddRemove = (id: number) => {
         if (selectedCategories.includes(id)) {
             setSelectedCategories(selectedCategories.filter((categoryId) => categoryId !== id));
+            setSelected(true)
         } else {
             setSelectedCategories([...selectedCategories, id]);
+            setSelected(false)
         }
     };
 
@@ -41,14 +42,16 @@ const SelectCategory = () => {
         setHoverStates((prevStates) => ({ ...prevStates, [id]: false }));
     };
 
+    const handleOpen = () => {
+        setIsOpen(true);
+    };
 
     const handleClose = () => {
         setIsOpen(false);
     };
-    
     return (
         <>
-            {/* <Button
+            <Button
                 display={"flex"}
                 height={{ sm: "20px", mm: "22px", ml: "24px", md: "26px", lg: "28px", xl: "30px", '2xl': '32px' }}
                 padding={{ sm: "12px", lg: "0px 10px", '2xl': '0px 12px' }}
@@ -58,9 +61,7 @@ const SelectCategory = () => {
                 borderRadius={{ sm: "4px", '2xl': "6px" }}
                 border={"1px solid var(--primary-states-focus-visible, rgba(17, 25, 12, 0.30))"}
                 background={" var(--white-100, #FFF)"}
-                onClick={()=>{
-                    setIsOpen(true)
-                }}
+                onClick={handleOpen}
             >
                 <Image src={"/right-icon-upload.svg"} alt={""}
                     width={{ sm: '14px', '2xl': "14px" }}
@@ -77,14 +78,15 @@ const SelectCategory = () => {
                 >
                     Import
                 </Text>
-            </Button> */}
-            {/* <Box hidden>
+            </Button>
+            <Box
+                hidden
+            >
                 <Modal
                     isOpen={isOpen}
-                    onClose={onClose}
-                    size={{ sm: "sm"}}
-                    isCentered
-                >
+                    onClose={handleClose}
+                    size={{ sm: "sm", md: 'lg', lg: "xl", '2xl': '4xl' }}
+                    isCentered >
                     <ModalOverlay />
                     <ModalContent
                         display={"flex"}
@@ -92,302 +94,302 @@ const SelectCategory = () => {
                         justifyContent={"center"}
                         alignItems={"center"}
                         margin={"auto"}
-                        width={{ 'sm': "95%", ml: "90%", md: "auto", '2xl': "900px" }}
+                        width={{ 'sm': "95%", ml: "90%", md: "auto", '2xl': "1117px" }}
                         borderRadius={{ sm: "14px", '2xl': '20px' }}
-                    > */}
-            <Box
-                display={"flex"}
-                flexDir={"column"}
-                alignItems={"flex-start"}
-                gap={{ sm: "", "lg": "8px" }}
-                width={{ sm: "", "lg": "1117px" }}
-                padding={{ sm: "", "lg": "32px 40px" }}
-                borderRadius={{ sm: "", "lg": "20px" }}
-                background={"var(--white, #FFF)"}
-            // border={"1px solid black"}
-            >
-                {/* First box */}
-                <Box
-                    display={"flex"}
-                    flexDir={"column"}
-                    alignItems={"flex-start"}
-                    gap={{ sm: "", "lg": "16px" }}
-                    alignSelf={"stretch"}
-                >
-                    <Box
-                        alignSelf={"stretch"}
                     >
-                        <Text
-                            color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
-                            fontFamily={"Inter"}
-                            fontSize={{ sm: "", "lg": "24px" }}
-                            fontStyle={"normal"}
-                            fontWeight={{ sm: "", "lg": "500" }}
-                            lineHeight={{ sm: "20px", "lg": "32px" }}
+                        <Box
+                            display={"flex"}
+                            flexDir={"column"}
+                            alignItems={"flex-start"}
+                            gap={{ sm: "", "lg": "8px" }}
+                            width={{ sm: "", "lg": "1117px" }}
+                            padding={{ sm: "", "lg": "32px 40px" }}
+                            borderRadius={{ sm: "", "lg": "20px" }}
+                            background={"var(--white, #FFF)"}
+                        // border={"1px solid black"}
                         >
-                            Add A Service Category
-                        </Text>
-                    </Box>
-                    <Box
-                        alignSelf={"stretch"}
-                    >
-                        <Text
-                            color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
-                            fontFamily={"Inter"}
-                            fontSize={{ sm: "", "lg": "16px" }}
-                            fontStyle={"normal"}
-                            fontWeight={{ sm: "", "lg": "400" }}
-                            lineHeight={{ sm: "20px", "lg": "24px" }}
-                        >
-                            Select a Service Category to add to your company. In the next step,
-                            we will suggest some important information you should track at every site you service.
-                        </Text>
-                    </Box>
-
-                </Box>
-
-                {/* Second Box */}
-                <Box
-                    display={"flex"}
-                    alignItems={"flex-start"}
-                    gap={{ sm: "", "lg": "30px" }}
-                    alignSelf={"stretch"}
-                >
-                    {/* Left box */}
-
-                    {
-                        category.map((value: any, id: number) => {
-                            return <Box
-                                key={id}
+                            {/* First box */}
+                            <Box
                                 display={"flex"}
                                 flexDir={"column"}
                                 alignItems={"flex-start"}
-                                gap={{ sm: "", "lg": "12px" }}
-                                width={{ sm: "", "lg": "503.5px" }}
-                                padding={{ sm: "", "lg": "24px" }}
-                                borderRadius={{ sm: "", "lg": "6px" }}
-                                // background={"var(--white, #FFF)"}
-                                background={"var(--white-100, #FFF)"}
-                                border={"1px solid var(--primary-states-focus, rgba(17, 25, 12, 0.12))"}
-                                _hover={{
-                                    boxShadow: "0px 4px 6px -1px rgba(0, 0, 0, 0.10), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                                }}
-                                onMouseEnter={() => handleMouseEnter(id)}
-                                onMouseLeave={() => handleMouseLeave(id)}
-
+                                gap={{ sm: "", "lg": "16px" }}
+                                alignSelf={"stretch"}
                             >
                                 <Box
-                                    display={"flex"}
-                                    alignItems={"center"}
-                                    gap={{ sm: "", "lg": "10px" }}
                                     alignSelf={"stretch"}
                                 >
-                                    <Box
-                                        display={"flex"}
-                                        alignItems={"center"}
-                                        gap={{ sm: "", "lg": "16px" }}
-                                        flex={"1 0 0"}
+                                    <Text
+                                        color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
+                                        fontFamily={"Inter"}
+                                        fontSize={{ sm: "", "lg": "24px" }}
+                                        fontStyle={"normal"}
+                                        fontWeight={{ sm: "", "lg": "500" }}
+                                        lineHeight={{ sm: "20px", "lg": "32px" }}
                                     >
-                                        <Box
-                                            display={"flex"}
-                                            alignItems={"center"}
-                                            justifyContent={"center"}
-                                            width={{ sm: "", "lg": "60px" }}
-                                            height={{ sm: "", "lg": "60px" }}
-                                            borderRadius={"6px"}
-                                            background={"var(--primary-states-hover, rgba(17, 25, 12, 0.04))"}
-                                        >
-                                            <Image src={"/circle.svg"} alt={"circle"} />
-                                        </Box>
-                                        <Box>
-                                            <Text>{value.name}</Text>
-                                        </Box>
-                                    </Box>
-                                    <Box>
-                                        <chakra.button
-                                            height={{ sm: "", "lg": "32px" }}
-                                            padding={{ sm: "", "lg": "0px 12px" }}
-                                            borderRadius={"6px"}
-                                            border={"1px solid var(--primary-main, #11190C)"}
-                                            display={"flex"}
-                                            justifyContent={"center"}
-                                            alignItems={"center"}
-                                            gap={{ sm: "", "lg": "8px" }}
-                                            background={
-                                                selectedCategories.includes(id)
-                                                    ? hoverStates[id]
-                                                        ? "white"
-                                                        : "var(--green-500, #38A169)"
-                                                    : "var(--white-100, #FFF)"
-                                            }
-                                            onClick={() => handleAddRemove(id)}
-                                        >
-                                            <Text
-
-                                                color={
-                                                    selectedCategories.includes(id)
-                                                        ? hoverStates[id]
-                                                            ? "red"
-                                                            : "white"
-                                                        : "var(--gray-70, #4A4B57)"
-                                                }
-
-                                                // {isAddClicked === id ? (isMouseEnter ? "red" : "white") : "var(--gray-70, #4A4B57)"}
-                                                fontFamily={"Inter"}
-                                                fontSize={{ sm: "", "lg": "14px" }}
-                                                fontStyle={"normal"}
-                                                fontWeight={{ sm: "", "lg": "600" }}
-                                                lineHeight={{ sm: "20px", "lg": "20px" }}
-                                            >
-                                                {selectedCategories.includes(id) ? (hoverStates[id] ? "Remove" : "Added") : "Add"}
-                                            </Text>
-                                            <Box>
-                                                <Image
-                                                    src={
-                                                        selectedCategories.includes(id)
-                                                            ? hoverStates[id]
-                                                                ? "/cross-x.svg"
-                                                                : "/circlePlus.svg"
-                                                            : "/plus.svg"
-                                                    }
-                                                    alt={"plus"} />
-                                            </Box>
-                                        </chakra.button>
-                                    </Box>
+                                        Add A Service Category
+                                    </Text>
                                 </Box>
-                                <Flex
-                                    flexDirection={"column"}
-                                    gap={{ sm: "", "lg": "16px" }}
+                                <Box
+                                    alignSelf={"stretch"}
                                 >
-                                    {/* 2nd text box */}
+                                    <Text
+                                        color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
+                                        fontFamily={"Inter"}
+                                        fontSize={{ sm: "", "lg": "16px" }}
+                                        fontStyle={"normal"}
+                                        fontWeight={{ sm: "", "lg": "400" }}
+                                        lineHeight={{ sm: "20px", "lg": "24px" }}
+                                    >
+                                        Select a Service Category to add to your company. In the next step,
+                                        we will suggest some important information you should track at every site you service.
+                                    </Text>
+                                </Box>
+
+                            </Box>
+
+                            {/* Second Box */}
+                            <Box
+                                display={"flex"}
+                                alignItems={"flex-start"}
+                                gap={{ sm: "", "lg": "30px" }}
+                                alignSelf={"stretch"}
+                            >
+                                {/* Left box */}
+
+                                {
+                                    category.map((value: any, id: number) => {
+                                        return <Box
+                                            key={id}
+                                            display={"flex"}
+                                            flexDir={"column"}
+                                            alignItems={"flex-start"}
+                                            gap={{ sm: "", "lg": "12px" }}
+                                            width={{ sm: "", "lg": "503.5px" }}
+                                            padding={{ sm: "", "lg": "24px" }}
+                                            borderRadius={{ sm: "", "lg": "6px" }}
+                                            // background={"var(--white, #FFF)"}
+                                            background={"var(--white-100, #FFF)"}
+                                            border={"1px solid var(--primary-states-focus, rgba(17, 25, 12, 0.12))"}
+                                            _hover={{
+                                                boxShadow: "0px 4px 6px -1px rgba(0, 0, 0, 0.10), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                                            }}
+                                            onMouseEnter={() => handleMouseEnter(id)}
+                                            onMouseLeave={() => handleMouseLeave(id)}
+
+                                        >
+                                            <Box
+                                                display={"flex"}
+                                                alignItems={"center"}
+                                                gap={{ sm: "", "lg": "10px" }}
+                                                alignSelf={"stretch"}
+                                            >
+                                                <Box
+                                                    display={"flex"}
+                                                    alignItems={"center"}
+                                                    gap={{ sm: "", "lg": "16px" }}
+                                                    flex={"1 0 0"}
+                                                >
+                                                    <Box
+                                                        display={"flex"}
+                                                        alignItems={"center"}
+                                                        justifyContent={"center"}
+                                                        width={{ sm: "", "lg": "60px" }}
+                                                        height={{ sm: "", "lg": "60px" }}
+                                                        borderRadius={"6px"}
+                                                        background={"var(--primary-states-hover, rgba(17, 25, 12, 0.04))"}
+                                                    >
+                                                        <Image src={"/circle.svg"} alt={"circle"} />
+                                                    </Box>
+                                                    <Box>
+                                                        <Text>{value.name}</Text>
+                                                    </Box>
+                                                </Box>
+                                                <Box>
+                                                    <chakra.button
+                                                        height={{ sm: "", "lg": "32px" }}
+                                                        padding={{ sm: "", "lg": "0px 12px" }}
+                                                        borderRadius={"6px"}
+                                                        border={"1px solid var(--primary-main, #11190C)"}
+                                                        display={"flex"}
+                                                        justifyContent={"center"}
+                                                        alignItems={"center"}
+                                                        gap={{ sm: "", "lg": "8px" }}
+                                                        background={
+                                                            selectedCategories.includes(id)
+                                                                ? hoverStates[id]
+                                                                    ? "white"
+                                                                    : "var(--green-500, #38A169)"
+                                                                : "var(--white-100, #FFF)"
+                                                        }
+                                                        onClick={() => handleAddRemove(id)}
+                                                    >
+                                                        <Text
+
+                                                            color={
+                                                                selectedCategories.includes(id)
+                                                                    ? hoverStates[id]
+                                                                        ? "red"
+                                                                        : "white"
+                                                                    : "var(--gray-70, #4A4B57)"
+                                                            }
+
+                                                            // {isAddClicked === id ? (isMouseEnter ? "red" : "white") : "var(--gray-70, #4A4B57)"}
+                                                            fontFamily={"Inter"}
+                                                            fontSize={{ sm: "", "lg": "14px" }}
+                                                            fontStyle={"normal"}
+                                                            fontWeight={{ sm: "", "lg": "600" }}
+                                                            lineHeight={{ sm: "20px", "lg": "20px" }}
+                                                        >
+                                                            {selectedCategories.includes(id) ? (hoverStates[id] ? "Remove" : "Added") : "Add"}
+                                                        </Text>
+                                                        <Box>
+                                                            <Image
+                                                                src={
+                                                                    selectedCategories.includes(id)
+                                                                        ? hoverStates[id]
+                                                                            ? "/cross-x.svg"
+                                                                            : "/circlePlus.svg"
+                                                                        : "/plus.svg"
+                                                                }
+                                                                alt={"plus"} />
+                                                        </Box>
+                                                    </chakra.button>
+                                                </Box>
+                                            </Box>
+                                            <Flex
+                                                flexDirection={"column"}
+                                                gap={{ sm: "", "lg": "16px" }}
+                                            >
+                                                {/* 2nd text box */}
+                                                <Box
+                                                    alignSelf={"stretch"}
+                                                >
+                                                    <Text
+                                                        color={"var(--gray-70, #4A4B57)"}
+                                                        fontFamily={"Inter"}
+                                                        fontSize={{ sm: "", "lg": "14px" }}
+                                                        fontStyle={"normal"}
+                                                        fontWeight={{ sm: "", "lg": "400" }}
+                                                        lineHeight={{ sm: "20px", "lg": "20px" }}
+                                                    >
+                                                        {value.subText}
+                                                    </Text>
+                                                </Box>
+                                                {/* 3rd heading + text */}
+                                                <Box
+                                                    display={"flex"}
+                                                    flexDir={"column"}
+                                                    alignItems={"flex-start"}
+                                                    gap={{ sm: "", "lg": "8px" }}
+                                                    alignSelf={"stretch"}
+                                                >
+                                                    <Box
+                                                        alignSelf={"stretch"}
+                                                    >
+                                                        <Text
+                                                            color={"var(--gray-70, #4A4B57)"}
+                                                            fontFamily={"Inter"}
+                                                            fontSize={{ sm: "", "lg": "12px" }}
+                                                            fontStyle={"normal"}
+                                                            fontWeight={{ sm: "", "lg": "700" }}
+                                                            lineHeight={{ sm: "20px", "lg": "16px" }}
+                                                            letterSpacing={"0.6px"}
+                                                        >
+                                                            You Care About:
+                                                        </Text>
+                                                    </Box>
+                                                    <Box
+                                                        alignSelf={"stretch"}
+                                                    >
+                                                        <Text
+                                                            color={"var(--gray-70, #4A4B57)"}
+                                                            fontFamily={"Inter"}
+                                                            fontSize={{ sm: "", "lg": "14px" }}
+                                                            fontStyle={"normal"}
+                                                            fontWeight={{ sm: "", "lg": "400" }}
+                                                            lineHeight={{ sm: "20px", "lg": "20px" }}
+                                                        >
+                                                            {value.about}
+                                                        </Text>
+                                                    </Box>
+                                                </Box>
+                                            </Flex>
+                                        </Box>
+                                    })
+                                }
+                                {/* right box */}
+
+                            </Box>
+
+                            {/* third box buttons */}
+
+                            <Box
+                                display={" flex"}
+                                alignItems={" flex-start"}
+                                gap={"16px"}
+                                alignSelf={"stretch"}
+                            >
+                                <chakra.button
+                                    display={"flex"}
+                                    alignItems={"center"}
+                                    justifyContent={"center"}
+                                    gap={{ sm: "", "lg": "8px" }}
+                                    height={{ sm: "", "lg": "32px" }}
+                                    padding={{ sm: "", "lg": "0px 12px" }}
+                                    borderRadius={"6px"}
+                                    border={" 1px solid var(--gray-200, #E2E8F0)"}
+                                >
                                     <Box
-                                        alignSelf={"stretch"}
+                                        onClick={handleClose}
                                     >
                                         <Text
-                                            color={"var(--gray-70, #4A4B57)"}
+                                            color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
                                             fontFamily={"Inter"}
                                             fontSize={{ sm: "", "lg": "14px" }}
                                             fontStyle={"normal"}
-                                            fontWeight={{ sm: "", "lg": "400" }}
+                                            fontWeight={{ sm: "", "lg": "600" }}
                                             lineHeight={{ sm: "20px", "lg": "20px" }}
                                         >
-                                            {value.subText}
+                                            cancel
                                         </Text>
                                     </Box>
-                                    {/* 3rd heading + text */}
-                                    <Box
-                                        display={"flex"}
-                                        flexDir={"column"}
-                                        alignItems={"flex-start"}
-                                        gap={{ sm: "", "lg": "8px" }}
-                                        alignSelf={"stretch"}
-                                    >
-                                        <Box
-                                            alignSelf={"stretch"}
+                                </chakra.button>
+                                <chakra.button
+                                    display={"flex"}
+                                    alignItems={"center"}
+                                    justifyContent={"center"}
+                                    gap={{ sm: "", "lg": "8px" }}
+                                    height={{ sm: "", "lg": "32px" }}
+                                    padding={{ sm: "", "lg": "0px 12px" }}
+                                    borderRadius={"6px"}
+                                    background={"var(--gray-100, #EDF2F7)"}
+                                        cursor={selected && 'not-allowed'}
+                                        opacity={selected && 0.5}
+                                >
+                                    <Box>
+                                        <Text
+                                            color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
+                                            fontFamily={"Inter"}
+                                            fontSize={{ sm: "", "lg": "14px" }}
+                                            fontStyle={"normal"}
+                                            fontWeight={{ sm: "", "lg": "600" }}
+                                            lineHeight={{ sm: "20px", "lg": "20px" }}
                                         >
-                                            <Text
-                                                color={"var(--gray-70, #4A4B57)"}
-                                                fontFamily={"Inter"}
-                                                fontSize={{ sm: "", "lg": "12px" }}
-                                                fontStyle={"normal"}
-                                                fontWeight={{ sm: "", "lg": "700" }}
-                                                lineHeight={{ sm: "20px", "lg": "16px" }}
-                                                letterSpacing={"0.6px"}
-                                            >
-                                                You Care About:
-                                            </Text>
-                                        </Box>
-                                        <Box
-                                            alignSelf={"stretch"}
-                                        >
-                                            <Text
-                                                color={"var(--gray-70, #4A4B57)"}
-                                                fontFamily={"Inter"}
-                                                fontSize={{ sm: "", "lg": "14px" }}
-                                                fontStyle={"normal"}
-                                                fontWeight={{ sm: "", "lg": "400" }}
-                                                lineHeight={{ sm: "20px", "lg": "20px" }}
-                                            >
-                                                {value.about}
-                                            </Text>
-                                        </Box>
+                                            next
+                                        </Text>
                                     </Box>
-                                </Flex>
+                                </chakra.button>
                             </Box>
-                        })
-                    }
-                    {/* right box */}
-
-                </Box>
-
-                {/* third box buttons */}
-
-                <Box
-                    display={" flex"}
-                    alignItems={" flex-start"}
-                    gap={"16px"}
-                    alignSelf={"stretch"}
-                >
-                    <chakra.button
-                        display={"flex"}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                        gap={{ sm: "", "lg": "8px" }}
-                        height={{ sm: "", "lg": "32px" }}
-                        padding={{ sm: "", "lg": "0px 12px" }}
-                        borderRadius={"6px"}
-                        border={" 1px solid var(--gray-200, #E2E8F0)"}
-                    >
-                        <Box
-                            onClick={handleClose}
-                        >
-                            <Text
-                                color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
-                                fontFamily={"Inter"}
-                                fontSize={{ sm: "", "lg": "14px" }}
-                                fontStyle={"normal"}
-                                fontWeight={{ sm: "", "lg": "600" }}
-                                lineHeight={{ sm: "20px", "lg": "20px" }}
-                            >
-                                cancel
-                            </Text>
                         </Box>
-                    </chakra.button>
-                    <chakra.button
-                        display={"flex"}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                        gap={{ sm: "", "lg": "8px" }}
-                        height={{ sm: "", "lg": "32px" }}
-                        padding={{ sm: "", "lg": "0px 12px" }}
-                        borderRadius={"6px"}
-                        background={"var(--gray-100, #EDF2F7)"}
-                        _disabled={{
-                            cursor: 'not-allowed',
-                            opacity: 0.5,
-                        }}
-                    >
-                        <Box>
-                            <Text
-                                color={"var(--text-primary, rgba(0, 0, 0, 0.87))"}
-                                fontFamily={"Inter"}
-                                fontSize={{ sm: "", "lg": "14px" }}
-                                fontStyle={"normal"}
-                                fontWeight={{ sm: "", "lg": "600" }}
-                                lineHeight={{ sm: "20px", "lg": "20px" }}
-                            >
-                                next
-                            </Text>
-                        </Box>
-                    </chakra.button>
-                </Box>
-            </Box>
-            {/* </ModalContent>
+                    </ModalContent>
                 </Modal>
-            </Box> */}
+            </Box>
+
         </>
 
     )
 }
 
 export default SelectCategory
+
