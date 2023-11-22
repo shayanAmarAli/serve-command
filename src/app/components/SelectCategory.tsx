@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import {
-    Box, Button, Flex, Image, Text, chakra, Modal, ModalOverlay, ModalContent,
+    Box, Flex, Image, Text, chakra, Modal, ModalOverlay, ModalContent,
 } from "@chakra-ui/react";
 import Popup from './pop-up';
 import { v4 as uuidv4 } from 'uuid';
@@ -107,7 +107,7 @@ const SelectCategory = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+       });
 
             if (response.ok) {
                 // Request was successful
