@@ -320,7 +320,7 @@ const Popup = () => {
                                             borderRadius={{ sm: "6px", md: "8px", '2xl': '8px' }}
                                             border={"2px dashed var(--black-alpha-300, rgba(0, 0, 0, 0.16))"}
                                             background={"var(--gray-0, #F7F7FA)"}
-                                            cursor={"pointer"}
+                                            
                                         >
                                             <Box
                                                 display={"flex"}
@@ -333,6 +333,7 @@ const Popup = () => {
                                                 borderRadius={{ sm: "4px", md: "4px", '2xl': '6px' }}
                                                 border={"1px solid var(--primary-main, #11190C)"}
                                                 background={"var(--white, #FFF)"}
+                                                cursor={"pointer"}
                                                 onClick={
                                                     () => {
                                                         const fileInput = document.getElementById("file-input");
