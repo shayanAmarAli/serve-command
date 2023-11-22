@@ -1,9 +1,10 @@
 "use client"
-
+import { v4 as uuidv4 } from 'uuid';
 import { Box, Flex, Image, chakra, Text } from "@chakra-ui/react"
 import React, { useState } from 'react'
 
 type category_types = {
+    id: number,
     name: string,
     subText: string,
     about: string
@@ -11,36 +12,44 @@ type category_types = {
 
 const category: category_types[] = [
     {
+        id: 1,
         name: "Landscape Irrigation",
         subText: "Also known as lawn sprinklers, lawn or shrub irrigation. Whatever you call it, you keep landscapes hydrated and healthy.",
         about: "Number of Zones, Controller Location, Controller Type, Backflow Location, etc."
     },
     {
+        id: 2,
         name: "Low-Voltage Landscape Lighting",
         subText: "Also known as landscape lighting or outdoor lighting, your job is to illuminate your clients’ outdoor spaces using low-voltage lighting.",
         about: "Number of Transformers, Transformer Location, Number of Fixtures, etc."
     },
 ]
-const SelectCategory = ({onClosePop}: any) => {
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+const SelectCategory = ({ onClosePop }: any) => {
+    const [selectedCategories, setSelectedCategories] = useState<any>();
     const [hoverStates, setHoverStates] = useState<{ [key: number]: boolean }>({});
     const [selected, setSelected] = useState<boolean>(true);
     const [uploadFile, setUploadFile] = useState<boolean>(true);
+    const [selectedCategoryNames, setSelectedCategoryNames] = useState<string[]>([]); // New state for category names
+    const [apiResponse, setApiResponse] = useState<string | null>(null);
 
-    const handleAddRemove = (id: number) => {
+    const handleAddRemove = (id: number, name: string) => {
         if (selectedCategories.includes(id)) {
-            setSelectedCategories((prevCategories) => {
-                const updatedCategories = prevCategories.filter((categoryId) => categoryId !== id);
+            setSelectedCategories((prevCategories: any) => {
+                // const names = category.filter((cat) => selectedCategories.includes(cat.id)).map((cat) => cat.name);
+                // setSelectedCategoryNames(names);
+                // selectedCategoryNames && console.log("selected category", selectedCategoryNames)
+                const updatedCategories = prevCategories.filter((categoryId: any) => categoryId !== id);
                 updatedCategories.length > 0 ? setSelected(false) : setSelected(true);
                 return updatedCategories;
             });
         } else {
-            setSelectedCategories((prevCategories) => {
-                const addCategory = [...prevCategories, id];
+            setSelectedCategories((prevCategories: any) => {
+                const addCategory = [...prevCategories, id, name];
                 addCategory.length == 0 ? setSelected(true) : setSelected(false);
                 return addCategory;
             });
         }
+        console.log("selected category", selectedCategoryNames)
     };
 
     const handleMouseEnter = (id: number) => {
@@ -50,6 +59,43 @@ const SelectCategory = ({onClosePop}: any) => {
     const handleMouseLeave = (id: number) => {
         setHoverStates((prevStates) => ({ ...prevStates, [id]: false }));
     };
+
+    const fetchData = async (category_name: string) => {
+        const apiUrl = 'https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/addservicecategory?SERVICE_CAT_ID=52f9c443-7379-4142-95f2-c8502c7d32ba&COMPANY_ID=52f9c443-7379-4142-95f2-c8502c7d32ab&SERVICE_CAT_NAME=Mishaal';
+
+        // Generate a new UUID
+        const serviceCatId = uuidv4();
+        const companyId = uuidv4();
+
+        const data = {
+            COMPANY_ID: companyId,
+            SERVICE_CAT_NAME: category_name,
+            SERVICE_CAT_ID: serviceCatId,
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                // Request was successful
+                const result = await response.json();
+                setApiResponse(result); // Store the API response in state
+            } else {
+                // Handle error
+                console.error('Error:', response.statusText);
+                setApiResponse(null); // Reset the API response in case of an error
+            }
+        } catch (error: any) {
+            console.error('Error:', error.message);
+            setApiResponse(null); // Reset the API response in case of an error
+        }
+    }
 
     return (
         <Box
@@ -122,7 +168,6 @@ const SelectCategory = ({onClosePop}: any) => {
                             width={{ sm: "", "lg": "503.5px" }}
                             padding={{ sm: "", "lg": "24px" }}
                             borderRadius={{ sm: "", "lg": "6px" }}
-                            // background={"var(--white, #FFF)"}
                             background={"var(--white-100, #FFF)"}
                             border={"1px solid var(--primary-states-focus, rgba(17, 25, 12, 0.12))"}
                             _hover={{
@@ -130,7 +175,6 @@ const SelectCategory = ({onClosePop}: any) => {
                             }}
                             onMouseEnter={() => handleMouseEnter(id)}
                             onMouseLeave={() => handleMouseLeave(id)}
-
                         >
                             <Box
                                 display={"flex"}
@@ -176,7 +220,7 @@ const SelectCategory = ({onClosePop}: any) => {
                                                     : "var(--green-500, #38A169)"
                                                 : "var(--white-100, #FFF)"
                                         }
-                                        onClick={() => handleAddRemove(id)}
+                                        onClick={() => handleAddRemove(id, value.name)}
                                     >
                                         <Text
                                             color={
@@ -323,7 +367,7 @@ const SelectCategory = ({onClosePop}: any) => {
                     onClick={() => {
                         console.log("Upload file state before", uploadFile)
                         setUploadFile(false)
-                        console.log("Upload file state after", uploadFile)
+                        console.log("Categories names sleeccted", selectedCategories)
                     }}
                 >
                     <Box>
@@ -334,6 +378,9 @@ const SelectCategory = ({onClosePop}: any) => {
                             fontStyle={"normal"}
                             fontWeight={{ sm: "", "lg": "600" }}
                             lineHeight={{ sm: "20px", "lg": "20px" }}
+                            onClick={() => {
+                                // fetchData()
+                            }}
                         >
                             next
                         </Text>

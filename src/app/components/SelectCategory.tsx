@@ -4,6 +4,7 @@ import {
     Box, Button, Flex, Image, Text, chakra, Modal, ModalOverlay, ModalContent,
 } from "@chakra-ui/react";
 import Popup from './pop-up';
+import { v4 as uuidv4 } from 'uuid';
 
 type category_types = {
     name: string,
@@ -30,21 +31,42 @@ const SelectCategory = () => {
     const [hoverStates, setHoverStates] = useState<{ [key: number]: boolean }>({});
     const [selected, setSelected] = useState<boolean>(true);
     const [uploadFile, setUploadFile] = useState<boolean>(true);
+    const [selectedCategoryNames, setSelectedCategoryNames] = useState<any>(); // New state for category names
+    const [apiResponse, setApiResponse] = useState<string | null>(null);
 
     const handleAddRemove = (id: number) => {
         if (selectedCategories.includes(id)) {
             setSelectedCategories((prevCategories) => {
                 const updatedCategories = prevCategories.filter((categoryId) => categoryId !== id);
+                console.log("categoroy is remove", updatedCategories)
+                const allSelectName = updatedCategories.map((cateId: number)=>{
+                    console.log(category[cateId].name);
+                    const abc = [];
+                    abc.push(category[cateId].name);
+                    return abc
+                })
+                console.log("all names are....", allSelectName)
+                setSelectedCategoryNames(allSelectName);
                 updatedCategories.length > 0 ? setSelected(false) : setSelected(true);
                 return updatedCategories;
             });
         } else {
             setSelectedCategories((prevCategories) => {
                 const addCategory = [...prevCategories, id];
+                console.log("categoroy is added", addCategory)
+                const allSelectName = addCategory.map((cateId: number)=>{
+                    console.log(category[cateId].name);
+                    const abc = [];
+                    abc.push(category[cateId].name);
+                    return abc
+                })
+                console.log("all names are....", allSelectName)
+                setSelectedCategoryNames(allSelectName);
                 addCategory.length == 0 ? setSelected(true) : setSelected(false);
                 return addCategory;
             });
         }
+        console.log("selected category name is ....", selectedCategoryNames);
     };
 
     const handleMouseEnter = (id: number) => {
@@ -62,6 +84,48 @@ const SelectCategory = () => {
     const handleClose = () => {
         setIsOpen(false);
     };
+
+    const fetchData = async () => {
+        // Generate a new UUID
+        const serviceCatId = uuidv4();
+        const companyId = uuidv4();
+        const category_name = selectedCategoryNames.join(', ')
+        console.log("name are in the string format")
+        // myArray.join(', ');
+        const data = {
+            COMPANY_ID: companyId,
+            SERVICE_CAT_NAME: category_name,
+            SERVICE_CAT_ID: serviceCatId,
+        };
+        const apiUrl = `https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/addservicecategory?SERVICE_CAT_ID=${data.SERVICE_CAT_ID}&COMPANY_ID=${data.COMPANY_ID}&SERVICE_CAT_NAME=${data.SERVICE_CAT_NAME}`;
+
+        console.log("Data send to api is ..", data);
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                // Request was successful
+                const result = await response.json();
+                setApiResponse(result); // Store the API response in state
+                console.log("your api response is....", response)
+            } else {
+                // Handle error
+                console.error('Error:', response.statusText);
+                setApiResponse(null); // Reset the API response in case of an error
+                console.log("ERROR response is....", response.statusText)
+            }
+        } catch (error: any) {
+            console.error('Error:', error.message);
+            setApiResponse(null); // Reset the API response in case of an error
+            console.log("ERROR response is....", error.message)
+        }
+    }
     return (
         <>
             <chakra.button
@@ -384,6 +448,8 @@ const SelectCategory = () => {
                                             console.log("Upload file state before", uploadFile)
                                             setUploadFile(false)
                                             console.log("Upload file state after", uploadFile)
+                                            console.log(selectedCategoryNames);
+                                            fetchData();
                                         }}
                                     >
                                         <Box>
