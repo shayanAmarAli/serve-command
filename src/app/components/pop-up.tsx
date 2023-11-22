@@ -95,7 +95,7 @@ const Popup = () => {
 
     return (
         <>
-            <Button
+            {/* <Button
                 display={"flex"}
                 height={{ sm: "20px", mm: "22px", ml: "24px", md: "26px", lg: "28px", xl: "30px", '2xl': '32px' }}
                 padding={{ sm: "12px", lg: "0px 10px", '2xl': '0px 12px' }}
@@ -138,7 +138,7 @@ const Popup = () => {
                         margin={"auto"}
                         width={{ 'sm': "95%", ml: "90%", md: "auto", '2xl': "900px" }}
                         borderRadius={{ sm: "14px", '2xl': '20px' }}
-                    >
+                    > */}
                         <Box
                             display={"flex"}
                             flexDir={"column"}
@@ -456,9 +456,9 @@ const Popup = () => {
                                 </Flex>
                             </Box>
                         </Box >
-                    </ModalContent>
+                    {/* </ModalContent>
                 </Modal>
-            </Box>
+            </Box> */}
 
         </>
     )
