@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { Box, Heading, Image, Text, Button, Flex } from "@chakra-ui/react"
+import { Box, Heading, Image, Text, Button, Flex, chakra } from "@chakra-ui/react"
 import Popup from './pop-up'
 import SelectCategory from './SelectCategory'
 
@@ -51,8 +51,8 @@ const sidebar = () => {
               alignItems={"center"}
             >
               <Image src={"/calendar.svg"} alt={"logo"}
-                width={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
-                height={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+                width={{ sm: "18px", mm: "16px", ml: "17px", md: "19px", lg: "22px", xl: "22px", '2xl': "24px" }}
+                height={{ sm: "18px", mm: "16px", ml: "17px", md: "19px", lg: "22px", xl: "22px", '2xl': "24px" }}
               />
             </Box>
             <Box
@@ -63,8 +63,8 @@ const sidebar = () => {
               gap={{ sm: "px", '2xl': "8px" }}
             >
               <Image src={"/placeholder.svg"} alt={"logo"}
-                width={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
-                height={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+                width={{ sm: "18px", mm: "16px", ml: "17px", md: "19px", lg: "22px", xl: "22px", '2xl': "24px" }}
+                height={{ sm: "18px", mm: "16px", ml: "17px", md: "19px", lg: "22px", xl: "22px", '2xl': "24px" }}
               />
             </Box>
             <Box
@@ -75,8 +75,8 @@ const sidebar = () => {
               gap={{ sm: "2px", '2xl': "8px" }}
             >
               <Image src={"/coins-hand.svg"} alt={"logo"}
-                width={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
-                height={{ sm: "18px", mm: "16px", ml: "17px", md: "18px", lg: "20px", xl: "22px", '2xl': "24px" }}
+                width={{ sm: "18px", mm: "16px", ml: "17px", md: "19px", lg: "22px", xl: "22px", '2xl': "24px" }}
+                height={{ sm: "18px", mm: "16px", ml: "17px", md: "19px", lg: "22px", xl: "22px", '2xl': "24px" }}
               />
             </Box>
           </Box>
@@ -168,7 +168,7 @@ const sidebar = () => {
             </Text>
           </Box>
 
-          <Button
+          <chakra.button
             display={"flex"}
             height={{ sm: "22px", '2xl': '32px' }}
             padding={{ sm: "0px 8px", '2xl': '0px 12px' }}
@@ -193,7 +193,7 @@ const sidebar = () => {
               width={{ sm: '', '2xl': "14px" }}
               height={{ sm: '', '2xl': "14px" }}
             />
-          </Button>
+          </chakra.button>
         </Box>
 
         <Box

@@ -1,11 +1,13 @@
 "use client"
 import {
-    Box, Button, Text, Image, Heading, Flex, Modal, ModalOverlay, ModalContent, Input, useDisclosure
+    Box, Button, Text, Image, Heading, Flex,
+    chakra,
+    Modal, ModalOverlay, ModalContent, Input, useDisclosure
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios"
 
-const Popup = () => {
+const Popup = ({ onClosePop }: any) => {
     const [isFileUploaded, setIsFileUploaded] = useState(false);
     const [fileName, setFileName] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -320,7 +322,7 @@ const Popup = () => {
                                             borderRadius={{ sm: "6px", md: "8px", '2xl': '8px' }}
                                             border={"2px dashed var(--black-alpha-300, rgba(0, 0, 0, 0.16))"}
                                             background={"var(--gray-0, #F7F7FA)"}
-                                            
+
                                         >
                                             <Box
                                                 display={"flex"}
@@ -373,7 +375,7 @@ const Popup = () => {
                     <Flex
                         gap={{ sm: "10px", md: "12px", lg: "13px", xl: "14px", '2xl': "16px" }}
                     >
-                        <Button
+                        <chakra.button
                             display={"flex"}
                             justifyContent={"center"}
                             alignItems={"center"}
@@ -382,35 +384,38 @@ const Popup = () => {
                             gap={{ sm: "4px", '2xl': "8px" }}
                             borderRadius={"6px"}
                             border={"1px solid var(--gray-200, #E2E8F0)"}
-                            onClick={onClose}
+                            onClick={onClosePop}
                             fontFamily={"Inter"}
                             fontSize={{ sm: "12px", '2xl': "14px" }}
                             fontStyle={"normal"}
                             fontWeight={"600"}
                             lineHeight={"20px"}
-
-                        >cancel</Button>
-                        <Button
+                        >cancel</chakra.button>
+                        <chakra.button
                             display={"flex"}
                             alignItems={"center"}
                             justifyContent={"center"}
                             height={{ sm: '', '2xl': '32px' }}
-                            padding={{ sm: '4px', '2xl': '0px 12px' }}
+                            padding={{ sm: '4px', lg: "2px 6px", '2xl': '0px 12px' }}
                             gap={{ sm: "4px", md: "5px", lg: "6px", xl: "8px", '2xl': "8px" }}
                             className="bg-btn"
                             color={"#FFF"}
                             fontFamily={"Inter"}
                             fontSize={{ sm: "12px", md: "14px", '2xl': "14px" }}
                             fontStyle={"normal"}
-                            fontWeight={{ sm: "500", md: "550", "2xl": "600" }}
+                            fontWeight={{ sm: "500", md: "500", "2xl": "600" }}
                             lineHeight={"20px"}
-                            // isDisabled={isFileUploaded ? false : true}
+                            disabled={isFileUploaded ? false : true}
+                            _disabled={{
+                                cursor: "not-allowed",
+                                opacity: 0.5
+                            }}
                             border={"1px solid var(--gray-200, #E2E8F0)"}
                             borderRadius={"6px"}
                             onClick={handleFileUpload}
                         >
                             begin import
-                        </Button>
+                        </chakra.button>
                     </Flex>
                 </Box>
             </Box >
