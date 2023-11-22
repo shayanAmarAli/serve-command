@@ -12,45 +12,6 @@ const Popup = ({ onClosePop }: any) => {
     const [fileName, setFileName] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [file, setFile] = useState<any>();
-    // const handleFileUpload = async (event: any) => {
-    //     const uploadedFile = await event.target.files[0];
-    //     uploadedFile && setIsFileUploaded(true);
-    //     uploadedFile && setFileName(uploadedFile.name);
-    //     setFileUploaded(uploadedFile)
-    //     console.log(uploadedFile.name)
-
-    //     const fileUploadHandler = async () => {
-    //         if (!uploadedFile.name) {
-    //             alert("Please select a file to upload");
-    //             return;
-    //         }
-
-    //         try {
-    //             const response = await fetch(
-    //                 `https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/generatepresignedurl?fileName=${file.name}&contentType=text/plain`
-    //             );
-    //             const data = await response.json();
-    //             console.log(data)
-    //             if (data.uploadUrl) {
-    //                 const uploadResponse = await fetch(data.uploadUrl, {
-    //                     method: "PUT",
-    //                     body: uploadedFile,
-    //                 });
-
-    //                 if (uploadResponse.ok) {
-    //                     alert("File uploaded successfully!");
-    //                 } else {
-    //                     alert("File upload failed");
-    //                 }
-    //             } else {
-    //                 alert("Failed to get pre-signed URL");
-    //             }
-    //         } catch (error) {
-    //             console.error("Error uploading file:", error);
-    //             alert("An error occurred while uploading the file.");
-    //         }
-    //     };
-    // };
 
     const handleFileChange = (event: any) => {
         const selectedFile = event.target.files[0];
@@ -92,8 +53,6 @@ const Popup = ({ onClosePop }: any) => {
             alert("An error occurred while uploading the file.");
         }
     };
-
-
 
     return (
         <>
@@ -241,7 +200,6 @@ const Popup = ({ onClosePop }: any) => {
                                             borderRadius={{ sm: "6px", md: "8px", '2xl': '8px' }}
                                             border={"2px dashed var(--black-alpha-300, rgba(0, 0, 0, 0.16))"}
                                             background={"var(--gray-0, #F7F7FA)"}
-                                        // margin={"auto"}
                                         >
 
                                             <Flex
