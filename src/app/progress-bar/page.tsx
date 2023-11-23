@@ -44,16 +44,20 @@ const Page = () => {
     return (
         <>
             <Button onClick={onOpen}>progress bar</Button>
-
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen}
+                onClose={onClose}
+                isCentered
+                size={{ sm: "sm", md: 'lg', lg: "xl", '2xl': '4xl' }}>
                 <ModalOverlay />
                 <ModalContent
-                    // bg={"none"}
-                    // boxShadow={"none"}
                     display={"flex"}
                     justifyContent={"start"}
-                    // flexDirection={"column"}
-                    // margin={"auto"}
+                    flexDir={"column"}
+                    alignItems={"center"}
+                    margin={"auto"}
+
+                // flexDirection={"column"}
+                // margin={"auto"}
                 >
                     {/* <Box
                         display={"flex"}
@@ -455,9 +459,6 @@ const Page = () => {
 
                 </ModalContent>
             </Modal>
-
-
-
         </>
     );
 };

@@ -1,10 +1,21 @@
 "use client"
-import React from 'react'
-import { Box, Heading, Image, Text, Button, Flex, chakra } from "@chakra-ui/react"
+import React, { useEffect } from 'react'
+import { Box, Heading, Image, Text, Flex, chakra } from "@chakra-ui/react"
+import { useRouter } from 'next/navigation';
 import Popup from './pop-up'
 import SelectCategory from './SelectCategory'
 
 const sidebar = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const local_Storage: any = localStorage.getItem("key");
+    console.log("Local storage contain....", local_Storage);
+    if (!local_Storage.session) {
+      router.push('/login'); // Redirect to login page
+    }
+  }, [])
+
   return (
     <Flex
       height={"100vh"}

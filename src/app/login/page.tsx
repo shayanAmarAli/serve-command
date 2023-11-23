@@ -1,5 +1,5 @@
 "use client"
-import { Box, Button, Flex, Heading, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Image, Input, Text, chakra } from "@chakra-ui/react";
 import { useState } from "react";
 import {
     CognitoIdentityProviderClient, RespondToAuthChallengeCommand,
@@ -21,7 +21,7 @@ const Page = () => {
             ...previousVal,
             [name]: value
         }));
-        
+
         console.log(loginInfo.phone)
     }
 
@@ -58,7 +58,8 @@ const Page = () => {
             }));
             console.log('session (from request) has been updated into context---->', userData.session);
             const isSession = await localStorage.getItem('key') as string
-            JSON.parse(isSession).session ? router.push('/') : router.push('/changePass')
+            response.ChallengeName === "NEW_PASSWORD_REQUIRED" && router.push('/changePass')
+            // JSON.parse(isSession).session ? router.push('/') : router.push('/changePass')
         } catch (err) {
             console.log(err)
         }
@@ -68,6 +69,7 @@ const Page = () => {
         <Flex
             flexDir={"column"}
             height={"100vh"}
+            bg={"var(--gray-50, #F7FAFC)"}
         >
             <Flex
                 flexDir={"column"}
@@ -115,14 +117,14 @@ const Page = () => {
                         {/* phone */}
                         <Flex
                             flexDir={"column"}
-                            gap={{ sm: "", '2xl': "8px" }}
+                            gap={{ sm: "", '2xl': "4px" }}
                         >
                             <Box
                                 height={{ sm: "", '2xl': "16px" }}
                                 alignSelf={"stretch"}
                             >
                                 <Text
-                                    color={"rgba(0, 0, 0, 0.64)"}
+                                    color={"var(--black-alpha-700, rgba(0, 0, 0, 0.64))"}
                                     fontFamily={"Inter"}
                                     fontSize={{ sm: "14px", '2xl': "12px" }}
                                     fontStyle={"normal"}
@@ -130,7 +132,7 @@ const Page = () => {
                                     lineHeight={"16px"}
                                     letterSpacing={"0.3px"}
                                 >
-                                    Phone
+                                    Phone Number
                                 </Text>
                             </Box>
                             <Box
@@ -147,6 +149,7 @@ const Page = () => {
                                     fontStyle={"normal"}
                                     fontWeight={400}
                                     lineHeight={"normal"}
+                                    background={"var(--white, #FFF)"}
                                     onChange={loginInputHandler}
                                     value={loginInfo.phone}
                                 />
@@ -155,7 +158,7 @@ const Page = () => {
                         {/* password */}
                         <Flex
                             flexDir={"column"}
-                            gap={{ sm: "", '2xl': "8px" }}
+                            gap={{ sm: "", '2xl': "4px" }}
                         >
                             <Box
                                 height={{ sm: "", '2xl': "16px" }}
@@ -198,7 +201,36 @@ const Page = () => {
 
                     <Box
                         display={"flex"}
-                        height={{ sm: "", '2xl': "40px" }}
+                        width={{ sm: "", "2xl": "360px" }}
+                        justifyContent={"flex-end"}
+                        alignItems={"center"}
+                    >
+                        <Box
+                            display={"flex"}
+                            height={{ sm: "", "2xl": "24px" }}
+                            padding={{ sm: "", "2xl": "0px 8px" }}
+                            justifyContent={"flex-end"}
+                            alignItems={"center"}
+                            gap={{ sm: "", "2xl": "6px" }}
+                            borderRadius={"6px"}
+                        >
+                            <Text
+                                color={"var(--primary-main, #11190C)"}
+                                fontFamily={"Inter"}
+                                fontSize={{ sm: "14px", '2xl': "12px" }}
+                                fontStyle={"normal"}
+                                fontWeight={600}
+                                lineHeight={"16px"}
+                            >
+                                Forgot Password
+                            </Text>
+                        </Box>
+                    </Box>
+
+                </Box>
+                    <Box
+                        display={"flex"}
+                        height={{ sm: "", lg: "34px", '2xl': "40px" }}
                         padding={{ sm: "", '2xl': "0px 16px" }}
                         justifyContent={"center"}
                         alignItems={"center"}
@@ -207,7 +239,7 @@ const Page = () => {
                         borderRadius={{ sm: "4px", md: "6px", '2xl': "6px" }}
                         background={"var(--primary-main, #11190C)"}
                     >
-                        <Button
+                        <chakra.button
                             color={"#FFF"}
                             fontFamily={"Inter"}
                             fontSize={{ sm: "", '2xl': "16px" }}
@@ -216,13 +248,9 @@ const Page = () => {
                             lineHeight={"24px"}
                             _hover={{ background: "none" }}
                             onClick={loginHanlder}
-                        >Sign in</Button>
+                        >Sign in</chakra.button>
                     </Box>
-                        <Link href={"/forgetPassword"}>
-                            Forget password
-                        </Link>
-                </Box>
-
+                    
             </Flex>
         </Flex>
     )
