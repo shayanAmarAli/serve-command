@@ -9,6 +9,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import axios from "axios";
+import ProgressBar from "../components/ProgressBar";
+import ImportSuccessful from "../components/ImportSuccessful";
 
 const ImportDialogueBox = ({ onClose }: any) => {
     const cancelRef: any = React.useRef();
@@ -78,9 +80,10 @@ const ImportDialogueBox = ({ onClose }: any) => {
     return (
         <>
 
-            {uploadProgress ? ( uploadProgress === 100 ? (<Box>uploaded</Box>) : (<Box>uploadding</Box>)) :
+            {uploadProgress ? 
+            (uploadProgress === 100 ? (<ImportSuccessful />) : (<ProgressBar uploadProgress={uploadProgress}/>)) :
                 (
-                    // MAIN FRAME
+                    // MAIN FRAME 
                     <Box
                         display={"flex"}
                         width={"900px"}
@@ -117,7 +120,6 @@ const ImportDialogueBox = ({ onClose }: any) => {
                                     background={
                                         "var(--primary-states-hover, rgba(17, 25, 12, 0.04))"
                                     }
-                                    // background={'blackAlpha.50'}
                                     padding={{ "2xl": "8px" }}
                                 >
                                     {/* Icon */}
@@ -478,10 +480,8 @@ const ImportDialogueBox = ({ onClose }: any) => {
                                     onClick={handleFileUpload}
                                     isDisabled={isSubmitDisabled}
                                 >
-
                                     Begin Import
                                 </Button>
-
                             </Box>
                         </Box>
                     </Box>
@@ -491,3 +491,4 @@ const ImportDialogueBox = ({ onClose }: any) => {
 };
 
 export default ImportDialogueBox;
+
