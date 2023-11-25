@@ -25,6 +25,8 @@ import {
 
 } from '@chakra-ui/react'
 import Udf_mapping from '../components/Udf_mapping';
+import ProgressBar from '../components/ProgressBar';
+import NestedMenu from '../components/NestedMenu';
 
 const Page = () => {
     const [uploadingStart, setUploadingStart] = useState();
@@ -401,8 +403,8 @@ const Page = () => {
                     //         </Box>
                     //     </Box>
                     // </Box>
-
-                    // <Udf_mapping />
+                    <Udf_mapping />
+                    // <NestedMenu />
         //             {/* <Box
         //                 display={"flex"}
         //                 width={{ sm: "", "lg": "432px" }}
@@ -461,7 +463,7 @@ const Page = () => {
         //         </ModalContent>
         //     </Modal>
         // </>
-        <ImportDialogueBox />
+        // <ImportDialogueBox />
     );
 };
 

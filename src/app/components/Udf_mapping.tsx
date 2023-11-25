@@ -1,23 +1,152 @@
+"use client"
 import {
-    Box, Text, chakra, Table, Thead, Tbody, Switch,
-    Tr, Th, Td, TableCaption, TableContainer, Image, Select
+    chakra, Table, Thead, Tbody, Switch,
+    Tr, Th, Td, TableCaption, TableContainer, Select
 } from '@chakra-ui/react'
-import axios, { AxiosError } from 'axios'
-import { useEffect } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import CategDropdown from './CategDropdown'
+import {
+    ChevronDownIcon,
+} from "@chakra-ui/icons";
+import { Button, Menu, MenuButton, MenuList, MenuItem, Box, Text, Icon, Image, useBoolean } from "@chakra-ui/react";
+import { ChevronRightIcon } from "@chakra-ui/icons";
+import NestedMenu from './NestedMenu'
 
-const fetchSelectedCategories = async () => {
-    try {
-        const response = await axios.get("");
-        const selCategoriesFetched = response.data;
-        console.log("Selected categories are....", selCategoriesFetched);
-        return selCategoriesFetched;
-    } catch (error) {
-        console.log("Error occurred...", error);
-    }
+type cateTypes = {
+    SORT_KEY: string,
+    NAME: null,
+    SUBLINE: string,
+    SUB_TEXT: string,
+    SUB_TYPE: string,
 }
 
+const initialCategories = [
+    {
+        SORT_KEY: "1",
+        NAME: null,
+        SUBLINE: "1",
+        SUB_TEXT: "Number of Zones:12",
+        SUB_TYPE: "Number"
+    },
+]
+
 const Udf_mapping = () => {
-    // const response = fetchSelectedCategories();
+    const [categories, setCategories] = useState<any>();
+    const [dropdownData, setDropdownData] = useState<any>();
+    const [isSwitchOn, toggleSwitch] = useBoolean();
+    const [switchStatus, setSwitchStatus] = useState<boolean[]>([]);
+    const [formatData, setFormatData] = useState<any>();
+    const [categSelected, setCategSelected] = useState();
+    const [formattedSelData, setFormattedSelData] = useState<any>([]);
+    const [confirmMapping, setConfirmMapping] = useState(false);
+
+    useEffect(() => {
+        const fetchSelectedCategories = async () => {
+            try {
+                const response = await axios.get("https://830wrvbmz2.execute-api.us-east-1.amazonaws.com/getalludfandsubdata?COMPANY_ID=1");
+                const selCategoriesFetched = response.data;
+                console.log("Selected categories are....", selCategoriesFetched);
+                setCategories(selCategoriesFetched);
+                return selCategoriesFetched;
+            } catch (error) {
+                console.log("Error occurred...", error);
+            }
+        }
+
+        const dropdownApi = async () => {
+            // https://zp2dhmgwaa.execute-api.us-east-1.amazonaws.com/getservicecategory?COMPANY_ID=1
+            try {
+                const response = await axios.get("https://830wrvbmz2.execute-api.us-east-1.amazonaws.com/getservicecategory?COMPANY_ID=3");
+                const seldropdownCateg = response.data;
+                console.log("Selected categories are....", seldropdownCateg);
+                
+                setDropdownData(seldropdownCateg);
+                return seldropdownCateg;
+            } catch (error) {
+                console.log("Error occurred...", error);
+            }
+        }
+
+        const combineData = categories !== undefined && categories.map((val: any, index: any) => ({
+            btn: <Switch />,
+            NAME: JSON.stringify(val.NAME),
+            SUB_TEXT: val.SUB_TEXT,
+            SUB_TYPE: val.SUB_TYPE,
+            nestedMenu: <NestedMenu />,
+        }))
+
+        setFormatData(combineData);
+        console.log("Structured data is...", combineData)
+
+        fetchSelectedCategories();
+        dropdownApi();
+    }, [])
+
+
+    const handleSwitchChange = (index: number) => {
+        const updatedStatus = [...switchStatus];
+        updatedStatus[index] = !updatedStatus[index];
+        formatData[index]
+        console.log("After selection of select categories", formatData[index]);
+        console.log("After selection of select categories", updatedStatus);
+        setSwitchStatus(updatedStatus);
+    };
+
+    const toggleBtnHandler = (selectedRow: any) => {
+        setFormattedSelData((prevArray: any) => {
+            const abc = [];
+            abc.push(...prevArray, selectedRow);
+            console.log("olds values", abc)
+            return abc
+        });
+        const updatedArray = [...formattedSelData, selectedRow];
+        setFormattedSelData(updatedArray);
+        console.log("after adding 4 attributes ", formattedSelData);
+        updateConfirmMapping(updatedArray);
+    };
+
+    const isConfirmMapping = () => {
+        const res = formattedSelData.every((item: any) => item.hasOwnProperty('COMPANY_ID'));
+        setConfirmMapping(res);
+        console.log("Response for confirm mapping is:", res);
+        return res;
+    };
+
+    const catSelectHandler = (key: number, otherAttributes: any) => {
+        const updatedArray = formattedSelData.map((obj: any) =>
+            obj.key === key ? { ...obj, ...otherAttributes } : obj
+        );
+        setFormattedSelData(updatedArray);
+        console.log("after adding all attributes ", formattedSelData);
+        updateConfirmMapping(updatedArray);
+    };
+
+    const updateConfirmMapping = (updatedArray: any) => {
+        const res = updatedArray.every((item: any) => item.hasOwnProperty('COMPANY_ID'));
+        setConfirmMapping(res);
+    };
+
+
+    const removeKeyNumberPair = async () => {
+        const newArray = formattedSelData.map(({ key, ...rest }: { key: number, [key: string]: any }) => rest);
+        console.log("new array without key is...", JSON.stringify(newArray));
+        try {
+            const postUDFData = "https://830wrvbmz2.execute-api.us-east-1.amazonaws.com/serviceextension";
+            const response = newArray.length > 0 && await axios.post(postUDFData, newArray, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            console.log("Selected categories are....", response);
+
+        } catch (error) {
+            console.log("Error aagya..", error)
+        }
+
+        return newArray;
+    };
+
     return (
         <Box
             display={"flex"}
@@ -219,54 +348,184 @@ const Udf_mapping = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                
-                                <Tr>
-                                    <Td>
-                                        <Box
-                                        display={"flex"}
-                                        alignItems={"center"}
-                                        height={{ sm: "", "2xl": "88px" }}
-                                        alignSelf={"stretch"}
+                                {
+                                    categories !== undefined &&
+                                    categories.map((value: any, index: number) => {
+                                        return <Tr key={index}
                                         >
-                                            <Switch size="lg" colorScheme='blue' />
-                                        </Box>
-                                    </Td>
-                                    <Td
-                                        color={"var(--gray-700, #2D3748)"}
-                                        fontFamily={"Inter"}
-                                        fontSize={{ sm: "14px", md: "16px" }}
-                                        fontStyle={"normal"}
-                                        fontWeight={400}
-                                        lineHeight={{ sm: "14px", md: "16px", "lg": "20px", "2xl": "24px" }}
-                                    >Sprinkler System Information</Td>
-                                    <Td
-                                        color={"var(--gray-700, #2D3748)"}
-                                        fontFamily={"Inter"}
-                                        fontSize={{ sm: "14px", md: "16px" }}
-                                        fontStyle={"normal"}
-                                        fontWeight={400}
-                                        lineHeight={{ sm: "14px", md: "16px", "lg": "20px", "2xl": "24px" }}
+                                            <Td>
+                                                <Box
+                                                    display={"flex"}
+                                                    alignItems={"center"}
+                                                    height={{ sm: "", "2xl": "88px" }}
+                                                    alignSelf={"stretch"}
+                                                >
+                                                    <Switch
+                                                        size="lg"
+                                                        colorScheme='blue'
+                                                        isChecked={switchStatus[index]}
+                                                        onChange={() => {
+                                                            handleSwitchChange(index)
+                                                            toggleBtnHandler({
+                                                                key: index,
+                                                                NAME: JSON.stringify(value.NAME) === "null" ? null : value.NAME,
+                                                                SUB_TEXT: value.SUB_TEXT,
+                                                                SUB_TYPE: value.SUB_TYPE,
+                                                            })
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </Td>
+                                            <Td
+                                                color={"var(--gray-700, #2D3748)"}
+                                                fontFamily={"Inter"}
+                                                fontSize={{ sm: "14px", md: "16px" }}
+                                                fontStyle={"normal"}
+                                                fontWeight={400}
+                                                lineHeight={{ sm: "14px", md: "16px", "lg": "20px", "2xl": "24px" }}
+                                            >{JSON.stringify(value.NAME)}</Td>
+                                            <Td
+                                                color={"var(--gray-700, #2D3748)"}
+                                                fontFamily={"Inter"}
+                                                fontSize={{ sm: "14px", md: "16px" }}
+                                                fontStyle={"normal"}
+                                                fontWeight={400}
+                                                lineHeight={{ sm: "14px", md: "16px", "lg": "20px", "2xl": "24px" }}
 
-                                    >Number of Zones
-                                        <Text
-                                            color={"var(--gray-500, #718096)"}
-                                            fontFamily={"Inter"}
-                                            fontSize={"12px"}
-                                            fontStyle={"normal"}
-                                            fontWeight={400}
-                                            lineHeight={{ sm: "12px", md: "14px", "lg": "15px", "2xl": "16px" }}
-                                        >
-                                            Numerical
-                                        </Text>
-                                    </Td>
-                                    <Td>
-                                        <Select placeholder='Irrigation'>
-                                            <option value='option1'>Option 1</option>
-                                            <option value='option2'>Option 2</option>
-                                            <option value='option3'>Option 3</option>
-                                        </Select>
-                                    </Td>
-                                </Tr>
+                                            >{value.SUB_TEXT}
+                                                <Text
+                                                    color={"var(--gray-500, #718096)"}
+                                                    fontFamily={"Inter"}
+                                                    fontSize={"12px"}
+                                                    fontStyle={"normal"}
+                                                    fontWeight={400}
+                                                    lineHeight={{ sm: "12px", md: "14px", "lg": "15px", "2xl": "16px" }}
+                                                >
+                                                    Numerical
+                                                </Text>
+                                            </Td>
+                                            <Td>
+                                                <Menu>
+                                                    {({ isOpen }) => (
+                                                        <>
+                                                            <MenuButton
+                                                                as={Button}
+                                                                rightIcon={<ChevronDownIcon />}
+                                                                isActive={isOpen}
+                                                                _hover={{ bg: "transparent" }}
+                                                                _expanded={{ bg: "transparent" }}
+                                                                _focus={{ boxShadow: "none" }}
+                                                                color={"var(--gray-500, #718096)"}
+                                                                width={"320px"}
+                                                                isDisabled={!switchStatus[index]}
+                                                            >
+                                                                Select Data Type
+                                                            </MenuButton>
+                                                            <MenuList
+                                                                display={"flex"}
+                                                                flexDir={"column"}
+                                                                width={"320px"}
+                                                                padding={"6px 12px"}
+                                                            >
+                                                                <Menu placement="right-start" >
+                                                                    {({ isOpen: isNestedOpen }) => (
+                                                                        <>
+                                                                            <MenuButton
+                                                                                as={Button}
+                                                                                leftIcon={<Image src={"/folder.svg"} alt={"folderIcon"} />}
+                                                                                rightIcon={<ChevronRightIcon />}
+                                                                                isActive={isNestedOpen}
+                                                                                _hover={{ bg: "transparent" }}
+                                                                                _expanded={{ bg: "var(--primary-states-hover, rgba(17, 25, 12, 0.04))" }}
+                                                                                _focus={{ boxShadow: "none" }}
+                                                                                display={"flex"}
+                                                                                padding={"6px 12px"}
+                                                                                alignItems={"center"}
+                                                                                gap={"10px"}
+                                                                                alignSelf={"stretch"}
+                                                                            >
+                                                                                <Text>Service Category</Text>
+                                                                            </MenuButton>
+                                                                            <MenuList style={{
+                                                                                position: "absolute",
+                                                                                top: 10,
+                                                                                margin: 10,
+                                                                                display: "flex",
+                                                                                width: "335px",
+                                                                                padding: "10px",
+                                                                                flexDirection: "column",
+                                                                                alignItems: "flex-start",
+                                                                                gap: "10px",
+                                                                                borderRadius: "6px",
+                                                                            }}  >
+                                                                                {/* {
+                                                                                    dropdownData !== undefined && dropdownData.map((value: any, id: any)=>{
+                                                                                        return <MenuItem
+                                                                                        key={id}
+                                                                                        onClick={() => {
+                                                                                            catSelectHandler(index, { ID: "3", COMPANY_ID: "145" });
+                                                                                        }}
+                                                                                        _active={{
+                                                                                            bg: "var(--primary-states-hover, rgba(17, 25, 12, 0.04))"
+                                                                                        }}
+    
+                                                                                    >land mark</MenuItem>
+                                                                                    })
+                                                                                } */}
+                                                                                <MenuItem
+                                                                                    onClick={() => {
+                                                                                        catSelectHandler(index, { ID: "9", COMPANY_ID: "199" });
+                                                                                    }}
+                                                                                    _active={{
+                                                                                        bg: "var(--primary-states-hover, rgba(17, 25, 12, 0.04))"
+                                                                                    }}
+
+                                                                                >Nested Option 1</MenuItem>
+
+                                                                            </MenuList>
+                                                                        </>
+                                                                    )}
+                                                                </Menu>
+                                                                <Menu placement="right-start">
+                                                                    {({ isOpen: isNestedOpen }) => (
+                                                                        <>
+                                                                            <MenuButton
+                                                                                as={Button}
+                                                                                leftIcon={<Image src={"/folder.svg"} alt={"folderIcon"} />}
+                                                                                rightIcon={<ChevronRightIcon />}
+                                                                                isActive={isNestedOpen}
+                                                                                _hover={{ bg: "transparent" }}
+                                                                                _expanded={{ bg: "var(--primary-states-hover, rgba(17, 25, 12, 0.04))" }}
+                                                                                _focus={{ boxShadow: "none" }}
+                                                                            >
+                                                                                Client Information
+                                                                            </MenuButton>
+                                                                            <MenuList style={{
+                                                                                position: "absolute",
+                                                                                top: 10,
+                                                                                margin: 10,
+                                                                                display: "flex",
+                                                                                width: "335px",
+                                                                                padding: "10px",
+                                                                                flexDirection: "column",
+                                                                                alignItems: "flex-start",
+                                                                                gap: "10px",
+                                                                                borderRadius: "6px",
+                                                                            }}  >
+                                                                                <MenuItem>Nested Option 1</MenuItem>
+                                                                            </MenuList>
+                                                                        </>
+                                                                    )}
+                                                                </Menu>
+                                                            </MenuList>
+                                                        </>
+                                                    )}
+                                                </Menu>
+                                            </Td>
+                                        </Tr>
+                                    })
+                                }
+
                             </Tbody>
                         </Table>
                     </Box>
@@ -309,15 +568,19 @@ const Udf_mapping = () => {
                         height={{ sm: "", "2xl": "32px" }}
                         padding={{ sm: "", "2xl": "0px 12px" }}
                         borderRadius={"6px"}
-                        background={true ? "var(--gray-100, #EDF2F7)" : "#000"}
-                        disabled={true}
+                        background={!confirmMapping ? "var(--gray-100, #EDF2F7)" : "#000"}
+                        disabled={!confirmMapping}
                         _disabled={{
                             cursor: 'not-allowed',
                             opacity: 0.5
                         }}
+                        onClick={() => {
+                            removeKeyNumberPair();
+                            // console.log("FORMATTED DATA THAT SEND to Api...", abc);
+                        }}
                     ><Box>
                             <Text
-                                color={true ? "var(--text-primary, rgba(0, 0, 0, 0.87))" : "#FFF"}
+                                color={!confirmMapping ? "var(--text-primary, rgba(0, 0, 0, 0.87))" : "#FFF"}
                                 fontFamily={"Inter"}
                                 fontSize={{ sm: "", "2xl": "14px" }}
                                 fontStyle={"normal"}
@@ -330,8 +593,7 @@ const Udf_mapping = () => {
                     </chakra.button>
                 </Box>
             </Box>
-        </Box>
-
+        </Box >
     )
 }
 
