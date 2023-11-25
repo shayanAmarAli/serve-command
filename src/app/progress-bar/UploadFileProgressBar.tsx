@@ -52,7 +52,7 @@ const ImportDialogueBox = ({ onClose }: any) => {
                     },
                 });
 
-                if (uploadResponse.data.status === 200) {
+                if (uploadResponse.status === 200) {
                     console.log("File uploaded successfully!");
                     onClose();
                     handleClear();
