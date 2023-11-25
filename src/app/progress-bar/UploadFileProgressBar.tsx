@@ -52,21 +52,19 @@ const ImportDialogueBox = ({ onClose }: any) => {
                     },
                 });
 
-                if (uploadResponse.status === 200) {
+                if (uploadResponse.data.status === 200) {
                     console.log("File uploaded successfully!");
                     onClose();
                     handleClear();
                 } else {
                     alert("File upload failed ");
-                    console.log(uploadResponse.data);
                 }
 
             } else {
-                alert("Failed to get pre-signed URL");
+                console.log("Pre-signed URL not found");
             }
         } catch (error) {
             console.error("Error uploading file:", error);
-            alert("An error occurred while uploading the file.");
         }
     };
 
