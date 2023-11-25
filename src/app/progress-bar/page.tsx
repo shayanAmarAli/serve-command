@@ -402,7 +402,7 @@ const Page = () => {
                     //     </Box>
                     // </Box>
 
-                    <Udf_mapping />
+                    // <Udf_mapping />
         //             {/* <Box
         //                 display={"flex"}
         //                 width={{ sm: "", "lg": "432px" }}
@@ -461,7 +461,7 @@ const Page = () => {
         //         </ModalContent>
         //     </Modal>
         // </>
-        // <ImportDialogueBox />
+        <ImportDialogueBox />
     );
 };
 
