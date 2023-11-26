@@ -28,7 +28,7 @@ const NestedMenu = ({ select }: any) => {
         dropdownApi();
     })
     console.log("dropdown categories are..", select);
-    
+
     return (
         <Menu>
             {({ isOpen }) => (
@@ -83,8 +83,9 @@ const NestedMenu = ({ select }: any) => {
                                         gap: "10px",
                                         borderRadius: "6px",
                                     }}  >
-                                        {dropdownData.map((name: any) => {
+                                        {dropdownData.map((name: any, id: any) => {
                                             return <MenuItem
+                                            key={id}
                                                 _active={{
                                                     bg: "var(--primary-states-hover, rgba(17, 25, 12, 0.04))"
                                                 }}
